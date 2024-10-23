@@ -26,12 +26,12 @@ def find_closest_switch(stone_position, switch_positions):
             closest_switch = switch_position
     return closest_switch
 
-def h(state):
-    stone_positions, switch_positions = find_stones_and_switches(state)
+def h(node):
+    stone_positions, switch_positions = find_stones_and_switches(node.state.grid)
     total_distance = 0
     for stone_position in stone_positions:
         closest_switch = find_closest_switch(stone_position, switch_positions)
-        total_distance += manhattan_distance(stone_position[0], stone_position[1], closest_switch[0], closest_switch[1])
+        total_distance += manhattan_distance(stone_position[0], stone_position[1], closest_switch[0], closest_switch[1]) * node.state.stone_weight_map[stone_position]
     return total_distance
 
 # Define the evaluation function f for A* (path_cost + heuristic)
@@ -40,7 +40,7 @@ def f(node):
     Evaluation function for A* search. It combines the path cost and
     the heuristic value (number of misplaced stones).
     """
-    return node.path_cost + h(node.state.grid)
+    return node.path_cost + h(node)
 
 # Define the initial Sokoban state (grid layout)
 initial_grid = (
