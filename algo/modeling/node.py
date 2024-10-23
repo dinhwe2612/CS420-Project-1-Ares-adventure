@@ -1,6 +1,6 @@
 class Node:
     def __init__(self, state, parent=None, action=None, path_cost=0, num_steps=0, total_weight=0):
-        self.state = state  # The state to which the node corresponds
+        self.state = state  # The State object (grid + stone weights)
         self.parent = parent  # The parent node that generated this node
         self.action = action  # The action taken to generate this node
         self.num_steps = num_steps  # The number of steps Ares has to take
