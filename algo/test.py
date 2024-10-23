@@ -67,6 +67,7 @@ if solution:
         actions.append(node.action)
         node = node.parent
     actions.reverse()  # Reverse the action list to get the correct order
+    actions = ''.join(actions)
     print("Solution found:", actions)
 else:
     print("No solution found")

@@ -35,18 +35,30 @@ class SokobanProblem:
         possible_actions = []
         player_pos = self.find_player(state.grid)
 
-        # Check UP
-        if self.is_valid_move(state.grid, player_pos, (-1, 0)):
-            possible_actions.append('UP')
-        # Check DOWN
-        if self.is_valid_move(state.grid, player_pos, (1, 0)):
-            possible_actions.append('DOWN')
-        # Check LEFT
-        if self.is_valid_move(state.grid, player_pos, (0, -1)):
-            possible_actions.append('LEFT')
-        # Check RIGHT
-        if self.is_valid_move(state.grid, player_pos, (0, 1)):
-            possible_actions.append('RIGHT')
+        # Check u
+        if self.is_valid_move(state.grid, player_pos, (-1, 0))[0] and not self.is_valid_move(state.grid, player_pos, (-1, 0))[1]:
+            possible_actions.append('u')
+        # Check d
+        if self.is_valid_move(state.grid, player_pos, (1, 0))[0] and not self.is_valid_move(state.grid, player_pos, (1, 0))[1]:
+            possible_actions.append('d')
+        # Check l
+        if self.is_valid_move(state.grid, player_pos, (0, -1))[0] and not self.is_valid_move(state.grid, player_pos, (0, -1))[1]:
+            possible_actions.append('l')
+        # Check r
+        if self.is_valid_move(state.grid, player_pos, (0, 1))[0] and not self.is_valid_move(state.grid, player_pos, (0, 1))[1]:
+            possible_actions.append('r')
+        # Check U
+        if self.is_valid_move(state.grid, player_pos, (-1, 0))[1]:
+            possible_actions.append('U')
+        # Check D
+        if self.is_valid_move(state.grid, player_pos, (1, 0))[1]:
+            possible_actions.append('D')
+        # Check L
+        if self.is_valid_move(state.grid, player_pos, (0, -1))[1]:
+            possible_actions.append('L')
+        # Check R
+        if self.is_valid_move(state.grid, player_pos, (0, 1))[1]:
+            possible_actions.append('R')
 
         return possible_actions
 
@@ -68,23 +80,23 @@ class SokobanProblem:
 
         # Check if the new position is within bounds
         if not (0 <= new_r < len(grid)) or not (0 <= new_c < len(grid[0])):
-            return False  # Out of bounds
+            return False, False  # Out of bounds
 
         # Check if the new position is a wall
         if grid[new_r][new_c] == '#':
-            return False  # If it's a wall
+            return False, False  # If it's a wall
 
         # Check if it's a stone ('$' or '*'), and if so, whether the stone can be pushed
         if grid[new_r][new_c] == '$' or grid[new_r][new_c] == '*':
             next_r, next_c = new_r + dr, new_c + dc
             # Check if the next position after the stone is within bounds
             if not (0 <= next_r < len(grid)) or not (0 <= next_c < len(grid[0])):
-                return False  # Out of bounds
+                return False, False  # Out of bounds
             # Check if the space ahead of the stone is free or a switch
             if grid[next_r][next_c] in (' ', '.'):
-                return True  # Valid push of the stone
-            return False  # Stone cannot be pushed
-        return True  # Move is valid if it's not blocked
+                return True, True  # Valid push of the stone
+            return False, False  # Stone cannot be pushed
+        return True, False  # Move is valid if it's not blocked
 
     def result(self, state, action):
         """Returns the new state after applying the given action (UP, DOWN, LEFT, RIGHT)."""
@@ -92,14 +104,16 @@ class SokobanProblem:
         player_pos = self.find_player(new_grid)
         r, c = player_pos
 
+        action = action.lower()  # Normalize the action to lowercase
+
         # Determine new player position based on the action
-        if action == "UP":
+        if action == "u":
             dr, dc = -1, 0
-        elif action == "DOWN":
+        elif action == "d":
             dr, dc = 1, 0
-        elif action == "LEFT":
+        elif action == "l":
             dr, dc = 0, -1
-        elif action == "RIGHT":
+        elif action == "r":
             dr, dc = 0, 1
 
         new_r, new_c = r + dr, c + dc
@@ -148,14 +162,16 @@ class SokobanProblem:
         player_pos = self.find_player(state.grid)
         r, c = player_pos
 
+        action = action.lower()  # Normalize the action to lowercase
+
         # Determine new player position based on the action
-        if action == "UP":
+        if action == "u":
             dr, dc = -1, 0
-        elif action == "DOWN":
+        elif action == "d":
             dr, dc = 1, 0
-        elif action == "LEFT":
+        elif action == "l":
             dr, dc = 0, -1
-        elif action == "RIGHT":
+        elif action == "r":
             dr, dc = 0, 1
 
         new_r, new_c = r + dr, c + dc
