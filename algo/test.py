@@ -1,18 +1,38 @@
 from modeling.problem import SokobanProblem
 from best_first_search import best_first_search
 
-# Define a heuristic function h (for example, it can be the number of misplaced stones)
-def h(node):
-    """
-    Heuristic function that counts the number of misplaced stones
-    (i.e., stones that are not on switches).
-    """
-    state = node.state
-    grid = state.grid
-    misplaced_stones = 0
-    for row in grid:
-        misplaced_stones += row.count('$')  # Count all stones not placed on switches
-    return misplaced_stones
+def manhattan_distance(x1, y1, x2, y2):
+    return abs(x1 - x2) + abs(y1 - y2)
+
+def find_stones_and_switches(state):
+    stone_positions = []
+    switch_positions = []
+    for row in range(len(state)):
+        for col in range(len(state[row])):
+            if state[row][col] == '$':
+                stone_positions.append((row, col))
+            elif state[row][col] == '.' or state[row][col] == '+' or state[row][col] == '*':
+                switch_positions.append((row, col))
+                
+    return stone_positions, switch_positions
+
+def find_closest_switch(stone_position, switch_positions):
+    closest_switch = switch_positions[0]
+    min_distance = manhattan_distance(stone_position[0], stone_position[1], closest_switch[0], closest_switch[1])
+    for switch_position in switch_positions[1:]:
+        distance = manhattan_distance(stone_position[0], stone_position[1], switch_position[0], switch_position[1])
+        if distance < min_distance:
+            min_distance = distance
+            closest_switch = switch_position
+    return closest_switch
+
+def h(state):
+    stone_positions, switch_positions = find_stones_and_switches(state)
+    total_distance = 0
+    for stone_position in stone_positions:
+        closest_switch = find_closest_switch(stone_position, switch_positions)
+        total_distance += manhattan_distance(stone_position[0], stone_position[1], closest_switch[0], closest_switch[1])
+    return total_distance
 
 # Define the evaluation function f for A* (path_cost + heuristic)
 def f(node):
@@ -20,7 +40,7 @@ def f(node):
     Evaluation function for A* search. It combines the path cost and
     the heuristic value (number of misplaced stones).
     """
-    return node.path_cost + h(node)
+    return node.path_cost + h(node.state.grid)
 
 # Define the initial Sokoban state (grid layout)
 initial_grid = (
