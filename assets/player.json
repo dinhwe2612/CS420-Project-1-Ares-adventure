@@ -1,0 +1,14 @@
+{
+    "walk": {
+        "sprite_sheet": "Pink_Monster_Walk.png",
+        "frame_width": 32,
+        "frame_height": 32,
+        "num_frames": 6,
+        "animation_per_frame": 8
+    },
+    "stand_still": {
+        "sprite_sheet": "Pink_Monster.png",
+        "frame_width": 32,
+        "frame_height": 32
+    }
+}
