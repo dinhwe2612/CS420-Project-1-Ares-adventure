@@ -33,14 +33,15 @@ def f(node):
 
 # Define the initial Sokoban state (grid layout)
 initial_grid = (
-    ('#', '#', '#', '#'),
-    (' ', '@', ' ', '#'),
-    (' ', '$', '.', '#'),
-    ('#', '#', '#', '#')
+    ('#', '#', '#', '#', '#', '#', '#', '#', '#', '#'),
+    ('#', '#', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '#'),
+    ('#', ' ', '$', ' ', '$', ' ', ' ', ' ', ' ', '#'),
+    ('#', '.', ' ', '@', ' ', ' ', ' ', ' ', '.', '#'),
+    ('#', '#', '#', '#', '#', '#', '#', '#', '#', '#')
 )
 
 # Define stone weights (one stone with weight 1)
-stone_weights = [1]
+stone_weights = [1, 99]
 
 # Create the Sokoban problem instance
 problem = SokobanProblem(initial_grid=initial_grid, stone_weights=stone_weights)
@@ -60,3 +61,8 @@ if solution:
     print("Solution found:", actions)
 else:
     print("No solution found")
+
+# Print steps, total_weight, and path_cost
+print("Steps:", solution.num_steps)
+print("Total weight:", solution.total_weight)
+print("Path cost:", solution.path_cost)

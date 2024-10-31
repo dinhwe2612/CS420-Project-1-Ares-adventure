@@ -14,8 +14,8 @@ class State:
         """
         Updates the stone weight map by moving the stone from old_position to new_position.
         """
-        stone_weight = self.stone_weight_map.pop(old_position)
-        self.stone_weight_map[new_position] = stone_weight
+        if old_position in self.stone_weight_map:
+            self.stone_weight_map[new_position] = self.stone_weight_map.pop(old_position)
 
     def __repr__(self):
         return f"State(grid={self.grid}, stone_weight_map={self.stone_weight_map})"
