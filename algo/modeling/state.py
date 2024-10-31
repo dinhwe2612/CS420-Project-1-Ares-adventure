@@ -8,6 +8,7 @@ class State:
         """
         self.grid = grid  # The Sokoban grid layout
         self.stone_weight_map = stone_weight_map  # Maps stone positions to their weights
+        self.switch_positions = self.find_switch_positions()
 
     def update_stone_position(self, old_position, new_position):
         """
@@ -18,3 +19,14 @@ class State:
 
     def __repr__(self):
         return f"State(grid={self.grid}, stone_weight_map={self.stone_weight_map})"
+    
+    def find_switch_positions(self):
+        """
+        Finds the positions of the switches in the grid.
+        """
+        switch_positions = []
+        for row in range(len(self.grid)):
+            for col in range(len(self.grid[row])):
+                if self.grid[row][col] == '.' or self.grid[row][col] == '+' or self.grid[row][col] == '*':
+                    switch_positions.append((row, col))
+        return switch_positions

@@ -4,18 +4,6 @@ from best_first_search import best_first_search
 def manhattan_distance(x1, y1, x2, y2):
     return abs(x1 - x2) + abs(y1 - y2)
 
-def find_stones_and_switches(state):
-    stone_positions = []
-    switch_positions = []
-    for row in range(len(state)):
-        for col in range(len(state[row])):
-            if state[row][col] == '$':
-                stone_positions.append((row, col))
-            elif state[row][col] == '.' or state[row][col] == '+' or state[row][col] == '*':
-                switch_positions.append((row, col))
-                
-    return stone_positions, switch_positions
-
 def find_closest_switch(stone_position, switch_positions):
     closest_switch = switch_positions[0]
     min_distance = manhattan_distance(stone_position[0], stone_position[1], closest_switch[0], closest_switch[1])
@@ -27,7 +15,8 @@ def find_closest_switch(stone_position, switch_positions):
     return closest_switch
 
 def h(node):
-    stone_positions, switch_positions = find_stones_and_switches(node.state.grid)
+    stone_positions = node.state.stone_weight_map.keys()
+    switch_positions = node.state.switch_positions
     total_distance = 0
     for stone_position in stone_positions:
         closest_switch = find_closest_switch(stone_position, switch_positions)
