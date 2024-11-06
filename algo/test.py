@@ -1,18 +1,27 @@
 from modeling.problem import SokobanProblem
 from best_first_search import best_first_search
 
-# Define a heuristic function h (for example, it can be the number of misplaced stones)
+def manhattan_distance(x1, y1, x2, y2):
+    return abs(x1 - x2) + abs(y1 - y2)
+
+def find_closest_switch(stone_position, switch_positions):
+    closest_switch = switch_positions[0]
+    min_distance = manhattan_distance(stone_position[0], stone_position[1], closest_switch[0], closest_switch[1])
+    for switch_position in switch_positions[1:]:
+        distance = manhattan_distance(stone_position[0], stone_position[1], switch_position[0], switch_position[1])
+        if distance < min_distance:
+            min_distance = distance
+            closest_switch = switch_position
+    return closest_switch
+
 def h(node):
-    """
-    Heuristic function that counts the number of misplaced stones
-    (i.e., stones that are not on switches).
-    """
-    state = node.state
-    grid = state.grid
-    misplaced_stones = 0
-    for row in grid:
-        misplaced_stones += row.count('$')  # Count all stones not placed on switches
-    return misplaced_stones
+    stone_positions = node.state.stone_weight_map.keys()
+    switch_positions = node.state.switch_positions
+    total_distance = 0
+    for stone_position in stone_positions:
+        closest_switch = find_closest_switch(stone_position, switch_positions)
+        total_distance += manhattan_distance(stone_position[0], stone_position[1], closest_switch[0], closest_switch[1]) * node.state.stone_weight_map[stone_position]
+    return total_distance
 
 # Define the evaluation function f for A* (path_cost + heuristic)
 def f(node):
@@ -24,14 +33,15 @@ def f(node):
 
 # Define the initial Sokoban state (grid layout)
 initial_grid = (
-    ('#', '#', '#', '#'),
-    (' ', '@', ' ', '#'),
-    (' ', '$', '.', '#'),
-    ('#', '#', '#', '#')
+    ('#', '#', '#', '#', '#', '#', '#', '#', '#', '#'),
+    ('#', '#', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '#'),
+    ('#', ' ', '$', ' ', '$', ' ', ' ', ' ', ' ', '#'),
+    ('#', '.', ' ', '@', ' ', ' ', ' ', ' ', '.', '#'),
+    ('#', '#', '#', '#', '#', '#', '#', '#', '#', '#')
 )
 
 # Define stone weights (one stone with weight 1)
-stone_weights = [1]
+stone_weights = [1, 99]
 
 # Create the Sokoban problem instance
 problem = SokobanProblem(initial_grid=initial_grid, stone_weights=stone_weights)
@@ -47,6 +57,12 @@ if solution:
         actions.append(node.action)
         node = node.parent
     actions.reverse()  # Reverse the action list to get the correct order
+    actions = ''.join(actions)
     print("Solution found:", actions)
 else:
     print("No solution found")
+
+# Print steps, total_weight, and path_cost
+print("Steps:", solution.num_steps)
+print("Total weight:", solution.total_weight)
+print("Path cost:", solution.path_cost)
