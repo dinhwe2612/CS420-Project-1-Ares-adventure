@@ -1,5 +1,5 @@
 from modeling import Node, expand
-from utils import PriorityQueue
+import queue
 
 def breadth_first_search(problem):
     """Implements Breadth-First search."""
@@ -10,28 +10,28 @@ def breadth_first_search(problem):
     if problem.goal_test(node.state):
         return node
     
-    # Create a priority queue ordered by the evaluation function f
-    frontier = PriorityQueue()
-    frontier.put(node, f(node))
+    # Create a queue
+    frontier = queue.Queue()
+    frontier.put(node)
     
     # A lookup table to store reached nodes (i.e., visited states)
     reached = {problem.initial_state: node}
     
-    while not frontier.is_empty():
-        # Get the node with the lowest f value from the frontier
+    while not frontier.empty():
+        # Get the node 
         node = frontier.get()
-        
-        # If the goal state is reached, return the node
-        if problem.goal_test(node.state):
-            return node
         
         # Expand the current node
         for child in expand(problem, node):
             s = child.state
             
+            # If the goal state is reached, return the child
+            if problem.goal_test(s):
+                return child
+            
             # Check if the new state has not been reached or has a lower path cost
-            if s not in reached or child.path_cost < reached[s].path_cost:
+            if s not in reached:
                 reached[s] = child  # Mark the state as reached with the new path cost
-                frontier.put(child, f(child))  # Add the child to the frontier
+                frontier.put(child)  # Add the child to the frontier
     
     return None  # Return failure if no solution is found

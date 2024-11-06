@@ -12,5 +12,7 @@ def expand(problem, node):
         steps = node.num_steps + 1
         # Calculate the weight
         weight = node.total_weight + problem.action_cost(s, action) - 1
+        # Calculate the depth
+        depth = node.depth + 1
         # Yield a new node corresponding to the resulting state
-        yield Node(state=s_prime, parent=node, action=action, path_cost=cost, num_steps=steps, total_weight=weight)
+        yield Node(state=s_prime, parent=node, action=action, path_cost=cost, num_steps=steps, total_weight=weight, depth=depth)
