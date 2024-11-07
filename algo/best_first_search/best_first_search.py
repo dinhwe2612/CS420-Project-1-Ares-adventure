@@ -11,8 +11,8 @@ def best_first_search(problem, f):
     frontier = PriorityQueue()
     frontier.put(node, f(node))
     
-    # A lookup table to store reached nodes (i.e., visited states)
-    reached = {problem.initial_state: node}
+    # A lookup table to store reached nodes (i.e., visited states) using hash values
+    reached = {hash(problem.initial_state): node}
     
     while not frontier.is_empty():
         # Get the node with the lowest f value from the frontier
@@ -25,10 +25,11 @@ def best_first_search(problem, f):
         # Expand the current node
         for child in expand(problem, node):
             s = child.state
+            s_hash = hash(s)  # Get the hash of the state
             
             # Check if the new state has not been reached or has a lower path cost
-            if s not in reached or child.path_cost < reached[s].path_cost:
-                reached[s] = child  # Mark the state as reached with the new path cost
+            if s_hash not in reached or child.path_cost < reached[s_hash].path_cost:
+                reached[s_hash] = child  # Mark the state as reached with the new path cost
                 frontier.put(child, f(child))  # Add the child to the frontier
     
     return None  # Return failure if no solution is found
