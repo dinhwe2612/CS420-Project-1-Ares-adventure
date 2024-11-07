@@ -98,13 +98,16 @@ class SokobanProblem:
             return False, False  # Stone cannot be pushed
         return True, False  # Move is valid if it's not blocked
 
-    def result(self, state, action):
-        """Returns the new state after applying the given action (UP, DOWN, LEFT, RIGHT)."""
+    def result_and_cost(self, state, action):
+        """Returns the new state after applying the given action and the corresponding action cost."""
         new_grid = [list(row) for row in state.grid]  # Create a deep copy of the grid
         player_pos = self.find_player(new_grid)
         r, c = player_pos
 
         action = action.lower()  # Normalize the action to lowercase
+
+        # Create a copy of the stone weight map to keep the initial state unchanged
+        new_stone_weight_map = state.stone_weight_map.copy()
 
         # Determine new player position based on the action
         if action == "u":
@@ -117,21 +120,32 @@ class SokobanProblem:
             dr, dc = 0, 1
 
         new_r, new_c = r + dr, c + dc
+        action_cost = 1  # Default action cost
 
-        # If moving onto a stone, move the stone
+        # If moving onto a stone, move the stone and calculate the cost based on stone weight
         if new_grid[new_r][new_c] == '$':
             stone_r, stone_c = new_r + dr, new_c + dc
-            if new_grid[stone_r][stone_c] == '.':  # Handle if the stone's new position is on a switch
+            if new_grid[stone_r][stone_c] == '.':  # If the stone's new position is on a switch
                 new_grid[stone_r][stone_c] = '*'
             else:
                 new_grid[stone_r][stone_c] = '$'  # Move the stone
             new_grid[new_r][new_c] = '@'  # Move player to the stone's original position
-            state.update_stone_position((new_r, new_c), (stone_r, stone_c))  # Update the stone weight map
+            # Update the stone weight map in the copied map
+            new_stone_weight_map[(stone_r, stone_c)] = new_stone_weight_map.pop((new_r, new_c))
+            
+            # Add stone weight to the cost
+            action_cost += new_stone_weight_map.get((stone_r, stone_c), 0)
+
         elif new_grid[new_r][new_c] == '*':
             stone_r, stone_c = new_r + dr, new_c + dc
             new_grid[stone_r][stone_c] = '$'  # Move the stone
-            new_grid[new_r][new_c] = '+'  # The player is now on the switch
-            state.update_stone_position((new_r, new_c), (stone_r, stone_c))  # Update the stone weight map
+            new_grid[new_r][new_c] = '+'  # Player is now on the switch
+            # Update the stone weight map in the copied map
+            new_stone_weight_map[(stone_r, stone_c)] = new_stone_weight_map.pop((new_r, new_c))
+            
+            # Add stone weight to the cost
+            action_cost += new_stone_weight_map.get((stone_r, stone_c), 0)
+
         elif new_grid[new_r][new_c] == '.':
             new_grid[new_r][new_c] = '+'  # Move player to a switch
         else:
@@ -142,9 +156,11 @@ class SokobanProblem:
             new_grid[r][c] = '.'  # Leave switch behind
         else:
             new_grid[r][c] = ' '  # Otherwise, just a free space
+            
+        print(new_grid)
 
-        # Return a new State object with the updated grid and stone weight map
-        return State(tuple(tuple(row) for row in new_grid), state.stone_weight_map.copy())
+        # Return both the new State object with the updated map and the action cost
+        return State(tuple(tuple(row) for row in new_grid), new_stone_weight_map), action_cost
 
     def goal_test(self, state):
         """Tests whether the current state is a goal."""
@@ -153,32 +169,3 @@ class SokobanProblem:
                 if state.grid[r][c] == '$':  # If a stone is not on a switch
                     return False
         return True
-
-    def action_cost(self, state, action):
-        """
-        Calculate the cost of a given action.
-        If a stone is moved, the cost is 1 plus the weight of the stone.
-        """
-        player_pos = self.find_player(state.grid)
-        r, c = player_pos
-
-        action = action.lower()  # Normalize the action to lowercase
-
-        # Determine new player position based on the action
-        if action == "u":
-            dr, dc = -1, 0
-        elif action == "d":
-            dr, dc = 1, 0
-        elif action == "l":
-            dr, dc = 0, -1
-        elif action == "r":
-            dr, dc = 0, 1
-
-        new_r, new_c = r + dr, c + dc
-
-        # If the player is moving a stone, calculate the stone's weight using the stone weight map
-        if state.grid[new_r][new_c] == '$' or state.grid[new_r][new_c] == '*':
-            stone_weight = state.stone_weight_map.get((new_r, new_c), 0)  # Fetch weight using the map
-            return 1 + stone_weight  # Base cost 1 + stone weight
-        else:
-            return 1  # If no stone is moved, the cost is just 1
