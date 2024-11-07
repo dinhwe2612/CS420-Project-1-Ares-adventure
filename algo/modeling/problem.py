@@ -169,3 +169,23 @@ class SokobanProblem:
                 if state.grid[r][c] == '$':  # If a stone is not on a switch
                     return False
         return True
+
+    def isMapLegit(self, grid):
+        """
+        Checks if the map is legit, i.e., if it has the same number of switches as stones.
+        """
+        switch_count = 0
+        stone_count = 0
+
+        for r, row in enumerate(grid):
+            for c, cell in enumerate(row):
+                if cell == '+':
+                    switch_count += 1
+                elif cell == '*':
+                    switch_count += 1
+                    stone_count += 1
+                elif cell == '$': 
+                    stone_count += 1
+                elif cell =='.': 
+                    switch_count += 1
+        return switch_count == stone_count

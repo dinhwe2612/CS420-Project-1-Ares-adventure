@@ -30,6 +30,29 @@ def f(node):
     """
     return node.path_cost + h(node)
 
+def read_file(filename):
+    initial_grid = []
+    stone_weights = []
+
+    with open(filename, 'r') as file:
+        # Read the first line for stone weights
+        weights_line = file.readline().strip()
+        stone_weights = list(map(int, weights_line.split()))
+
+        # Read the rest of the file for the grid
+        for line in file:
+            # Ignore empty lines and strip each line of excess spaces
+            row = tuple(line.rstrip())
+            if row:
+                initial_grid.append(row)
+
+    # Convert list of lists into a tuple of tuples
+    initial_grid = tuple(initial_grid)
+    return initial_grid, stone_weights
+
+# filename = "../input/input-05.txt"
+# initial_grid, stone_weights = read_file(filename)
+
 # Define the initial Sokoban state (grid layout)
 initial_grid = (
     ('#', '#', '#', '#', '#', '#', '#', '#', '#', '#'),
@@ -47,6 +70,11 @@ stone_weights = [2, 3, 1]
 # Create the Sokoban problem instance
 problem = SokobanProblem(initial_grid=initial_grid, stone_weights=stone_weights)
 
+is_valid = problem.isMapLegit(initial_grid)
+if not is_valid:
+    print("Invalid map")
+    exit()
+
 # Run Best-First Search using A* with a heuristic function
 solution = best_first_search(problem, lambda node: f(node))
 
@@ -60,10 +88,9 @@ if solution:
     actions.reverse()  # Reverse the action list to get the correct order
     actions = ''.join(actions)
     print("Solution found:", actions)
+    # Print steps, total_weight, and path_cost
+    print("Steps:", solution.num_steps)
+    print("Total weight:", solution.total_weight)
+    print("Path cost:", solution.path_cost)
 else:
     print("No solution found")
-
-# Print steps, total_weight, and path_cost
-print("Steps:", solution.num_steps)
-print("Total weight:", solution.total_weight)
-print("Path cost:", solution.path_cost)
