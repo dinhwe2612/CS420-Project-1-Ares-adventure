@@ -10,8 +10,10 @@ def depth_first_search(problem):
     if problem.goal_test(node.state):
         return node
     
-    # Stack for DFS (LIFO behavior)
+    # Stack for DFS
     frontier = [(node, [node.state])]  # Stack of (node, path), path keeps track of visited states in current branch
+    explored = set()  # Set of explored states
+    explored.add(node.state)  # Mark the initial state as explored
     
     while frontier:
         # Get the node and the path (history of states)
@@ -20,14 +22,16 @@ def depth_first_search(problem):
         # Expand the current node
         for child in expand(problem, node):
             s = child.state
+            # Convert the state to a hashable type
+            hash_code = s.__hash__()
             
             # If the goal state is reached, return the child node
             if problem.goal_test(s):
                 return child
             
-            # Check if the new state has been visited in this path (to prevent cycles)
-            if s not in path:
-                # Add the child node to the frontier and append current state to the path
-                frontier.append((child, path + [s]))  # New path includes the current state
+            # If the state is not explored, add it to the frontier
+            if hash_code not in explored:
+                frontier.append((child, path + [s]))
+                explored.add(hash_code)
     
     return None  # Return failure if no solution is found

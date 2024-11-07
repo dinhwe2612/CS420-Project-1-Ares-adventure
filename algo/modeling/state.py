@@ -30,3 +30,9 @@ class State:
                 if self.grid[row][col] == '.' or self.grid[row][col] == '+' or self.grid[row][col] == '*':
                     switch_positions.append((row, col))
         return switch_positions
+    def __hash__(self):
+        # Iterate over the grid to create a hashable representation
+        hashable = ()
+        for row in self.grid:
+            hashable += tuple(row)
+        return hash(hashable)
