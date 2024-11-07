@@ -14,3 +14,6 @@ class PriorityQueue:
     
     def get(self):
         return heapq.heappop(self.elements)[1]  # Returns the item with the lowest priority
+    
+    def qsize(self):
+        return len(self.elements)

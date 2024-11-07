@@ -1,6 +1,7 @@
 from mode import PlayGameMode, GameModeObserver, MenuGameMode, MessageGameMode
 from state import GameState
 import pygame
+import pygame_gui
 
 class UserInterface(GameModeObserver):
     def __init__(self):
@@ -14,6 +15,8 @@ class UserInterface(GameModeObserver):
 
         self.window = pygame.display.set_mode((self.SCREEN_WIDTH, self.SCREEN_HEIGHT))
 
+        self.ui_manager = pygame_gui.UIManager((self.SCREEN_WIDTH, self.SCREEN_HEIGHT))
+        
         self.gameState = None
         self.gameMode = MenuGameMode(self)
         self.prevGameMode = None
@@ -48,8 +51,8 @@ class UserInterface(GameModeObserver):
             self.gameMode.update()
             self.gameMode.render(self.window)
             pygame.display.update()
-            self.clock.tick(60)
-
+            time_delta = self.clock.tick(60) / 1000.0
+            
         pygame.quit()
 
     def applicationExit(self):

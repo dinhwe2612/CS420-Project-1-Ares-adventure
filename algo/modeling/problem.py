@@ -157,7 +157,7 @@ class SokobanProblem:
         else:
             new_grid[r][c] = ' '  # Otherwise, just a free space
             
-        print(new_grid)
+        # print(new_grid)
 
         # Return both the new State object with the updated map and the action cost
         return State(tuple(tuple(row) for row in new_grid), new_stone_weight_map), action_cost

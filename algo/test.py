@@ -1,27 +1,26 @@
 from modeling.problem import SokobanProblem
 from best_first_search import best_first_search
+import numpy as np
+from scipy.sparse import csr_matrix
+from scipy.sparse.csgraph import min_weight_full_bipartite_matching
 
-def manhattan_distance(x1, y1, x2, y2):
-    return abs(x1 - x2) + abs(y1 - y2)
-
-def find_closest_switch(stone_position, switch_positions):
-    closest_switch = switch_positions[0]
-    min_distance = manhattan_distance(stone_position[0], stone_position[1], closest_switch[0], closest_switch[1])
-    for switch_position in switch_positions[1:]:
-        distance = manhattan_distance(stone_position[0], stone_position[1], switch_position[0], switch_position[1])
-        if distance < min_distance:
-            min_distance = distance
-            closest_switch = switch_position
-    return closest_switch
+def manhattan_distance(a, b):
+    return abs(a[0] - b[0]) + abs(a[1] - b[1])
 
 def h(node):
     stone_positions = node.state.stone_weight_map.keys()
     switch_positions = node.state.switch_positions
-    total_distance = 0
-    for stone_position in stone_positions:
-        closest_switch = find_closest_switch(stone_position, switch_positions)
-        total_distance += manhattan_distance(stone_position[0], stone_position[1], closest_switch[0], closest_switch[1]) * node.state.stone_weight_map[stone_position]
-    return total_distance
+    # 
+    weight_matrix = [[manhattan_distance(stone_position, switch_position)*node.state.stone_weight_map.get(stone_position) for switch_position in switch_positions] for stone_position in stone_positions]
+    weight_matrix = csr_matrix(weight_matrix)
+    row_ind, col_ind = min_weight_full_bipartite_matching(weight_matrix)
+    #
+    for r, row in enumerate(node.state.grid):
+        for c, cell in enumerate(row):
+            if cell == '@' or cell == '+':  # '@' is Ares, '+' is Ares on a switch
+                ares_position = (r, c)
+    min_dist_switch = min(manhattan_distance(ares_position, switch_position) for switch_position in switch_positions)
+    return weight_matrix[row_ind, col_ind].sum() + min_dist_switch
 
 # Define the evaluation function f for A* (path_cost + heuristic)
 def f(node):
@@ -34,14 +33,16 @@ def f(node):
 # Define the initial Sokoban state (grid layout)
 initial_grid = (
     ('#', '#', '#', '#', '#', '#', '#', '#', '#', '#'),
-    ('#', '#', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '#'),
-    ('#', ' ', '$', ' ', '$', ' ', ' ', ' ', ' ', '#'),
-    ('#', '.', ' ', '@', ' ', ' ', ' ', ' ', '.', '#'),
+    ('#', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '#'),
+    ('#', ' ', '$', ' ', ' ', '$', ' ', ' ', ' ', '#'),
+    ('#', ' ', ' ', ' ', '.', ' ', '.', ' ', ' ', '#'),
+    ('#', ' ', ' ', ' ', '@', ' ', ' ', ' ', ' ', '#'),
+    ('#', ' ', '$', ' ', ' ', '.', ' ', ' ', ' ', '#'),
     ('#', '#', '#', '#', '#', '#', '#', '#', '#', '#')
 )
 
 # Define stone weights (one stone with weight 1)
-stone_weights = [1, 99]
+stone_weights = [2, 3, 1]
 
 # Create the Sokoban problem instance
 problem = SokobanProblem(initial_grid=initial_grid, stone_weights=stone_weights)
