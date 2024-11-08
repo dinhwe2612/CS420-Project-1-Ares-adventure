@@ -78,9 +78,13 @@ class SokobanProblem:
         dr, dc = move
         new_r, new_c = r + dr, c + dc
 
-        # Check if the new position is within bounds
-        if not (0 <= new_r < len(grid)) or not (0 <= new_c < len(grid[0])):
-            return False, False  # Out of bounds
+        # Check if the new row index is within bounds
+        if not (0 <= new_r < len(grid)):
+            return False, False  # Out of bounds on rows
+
+        # Check if the new column index is within the bounds of the specific row
+        if not (0 <= new_c < len(grid[new_r])):
+            return False, False  # Out of bounds on columns in the specific row
 
         # Check if the new position is a wall
         if grid[new_r][new_c] == '#':
@@ -90,7 +94,7 @@ class SokobanProblem:
         if grid[new_r][new_c] == '$' or grid[new_r][new_c] == '*':
             next_r, next_c = new_r + dr, new_c + dc
             # Check if the next position after the stone is within bounds
-            if not (0 <= next_r < len(grid)) or not (0 <= next_c < len(grid[0])):
+            if not (0 <= next_r < len(grid)) or not (0 <= next_c < len(grid[next_r])):
                 return False, False  # Out of bounds
             # Check if the space ahead of the stone is free or a switch
             if grid[next_r][next_c] in (' ', '.'):

@@ -72,8 +72,6 @@ def best_first_search(problem, f):
     total_time_ms = (end_time - start_time) * 1000
     _, peak_memory = tracemalloc.get_traced_memory()
     tracemalloc.stop()
-
-    print(node.state)
     
     return {
         "solution": None,
