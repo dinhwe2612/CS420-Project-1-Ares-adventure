@@ -45,24 +45,17 @@ def format_result(algo_name, result):
     nodes = result.get("nodes", 0)
     time_ms = result.get("time_ms", 0.0)
     memory_mb = result.get("memory_mb", 0.0)
-    
-    # Retrieve the solution path if found
-    path_node = result.get("solution")
-    actions = []
-    if path_node:
-        while path_node.parent is not None:
-            actions.append(path_node.action)
-            path_node = path_node.parent
-        actions.reverse()
-        actions = ''.join(actions)
-    else:
-        actions = "No solution found"
+    solution = result.get("solution")
+
+    # Print the solution if found, otherwise notify no solution
+    if not solution:
+        solution = "No solution found"
     
     # Construct the formatted result as a string
     formatted_result = [
         f"{algo_name}",
         f"Steps: {steps}, Weight: {weight}, Nodes: {nodes}, Time (ms): {time_ms}, Memory (MB): {memory_mb}",
-        actions
+        solution
     ]
     return "\n".join(formatted_result)
 
