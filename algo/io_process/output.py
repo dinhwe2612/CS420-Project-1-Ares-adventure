@@ -25,3 +25,6 @@ def process_result(result):
         output["weight"] = "No weight measured"
 
     return output
+
+def output_to_file(result):
+    return None

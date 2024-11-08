@@ -37,7 +37,7 @@ def breadth_first_search(problem):
     
     # Track the number of nodes expanded
     nodes_expanded = 0
-    reached = {problem.initial_state: node}
+    reached = {hash(problem.initial_state): node}
     
     # Main search loop
     while not frontier.empty():
@@ -47,6 +47,7 @@ def breadth_first_search(problem):
         # Expand the current node
         for child in expand(problem, node):
             s = child.state
+            s_hash = hash(s)  # Get the hash of the state
             
             # If the goal state is reached, collect metrics and return results
             if problem.goal_test(s):
@@ -61,7 +62,7 @@ def breadth_first_search(problem):
                 current = child
                 while current.parent is not None:
                     actions.append(current.action)
-                    weight.append(current.total_weight)
+                    weight.append(current.path_cost)
                     current = current.parent
                 
                 actions.reverse()  # Reverse the action list to get the correct order
@@ -78,8 +79,8 @@ def breadth_first_search(problem):
                 }
             
             # Check if the state has not been reached before
-            if s not in reached:
-                reached[s] = child
+            if s_hash not in reached:
+                reached[s_hash] = child
                 frontier.put(child)
     
     # Return metrics if no solution is found

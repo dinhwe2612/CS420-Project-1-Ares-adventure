@@ -41,7 +41,7 @@ def best_first_search(problem, f):
             current = node
             while current.parent is not None:
                 actions.append(current.action)
-                weight.append(current.total_weight)
+                weight.append(current.path_cost)
                 current = current.parent
             
             actions.reverse()  # Reverse the action list to get the correct order
@@ -72,6 +72,8 @@ def best_first_search(problem, f):
     total_time_ms = (end_time - start_time) * 1000
     _, peak_memory = tracemalloc.get_traced_memory()
     tracemalloc.stop()
+
+    print(node.state)
     
     return {
         "solution": None,

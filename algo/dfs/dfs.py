@@ -62,7 +62,7 @@ def depth_first_search(problem):
                 current = child
                 while current.parent is not None:
                     actions.append(current.action)
-                    weight.append(current.total_weight)
+                    weight.append(current.path_cost)
                     current = current.parent
 
                 actions.reverse()  # Reverse the action list to get the correct order
