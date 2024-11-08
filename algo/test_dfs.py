@@ -15,7 +15,7 @@ initial_grid = (
 # Define stone weights (one stone with weight 1)
 stone_weights = [1]
 
-initial_grid, stone_weights = read_file("D:/GitHub/CS420-Project-1-Ares-adventure/input/input-01.txt")
+initial_grid, stone_weights = read_file("../input/input-03.txt")
 initial_grid = turnIntoTuple(initial_grid)
 
 # Create the Sokoban problem instance

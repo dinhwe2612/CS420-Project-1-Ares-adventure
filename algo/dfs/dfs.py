@@ -1,25 +1,21 @@
 import time
-import tracemalloc
+import psutil
+# import tracemalloc
 from modeling import Node, expand
 
 def depth_first_search(problem):
     """Implements Depth-First Search with node, time, specific memory, steps, and weight tracking."""
 
     # Track performance metrics
-    start_time = time.time()
-    
-    # Start memory tracking with tracemalloc
-    tracemalloc.start()
+    start_time = time.perf_counter()
 
     # Create the initial node
     node = Node(state=problem.initial_state)
     
     # If the initial state is the goal, return immediately
     if problem.goal_test(node.state):
-        end_time = time.time()
-        total_time_ms = (end_time - start_time) * 1000
-        _, peak_memory = tracemalloc.get_traced_memory()
-        tracemalloc.stop()
+        total_time_ms = (time.perf_counter() - start_time)*1000
+        memory_usage = psutil.Process().memory_info().rss
         
         return {
             "solution": [],
@@ -27,7 +23,7 @@ def depth_first_search(problem):
             "steps": 0,
             "weight": 0,
             "time_ms": round(total_time_ms, 2),
-            "memory_mb": round(peak_memory / (1024 * 1024), 2)
+            "memory_mb": round(memory_usage / (1024 * 1024), 2)
         }
     
     # Stack for DFS
@@ -51,10 +47,8 @@ def depth_first_search(problem):
             
             # If the goal state is reached, collect metrics and return results
             if problem.goal_test(s):
-                end_time = time.time()
-                total_time_ms = (end_time - start_time) * 1000
-                _, peak_memory = tracemalloc.get_traced_memory()
-                tracemalloc.stop()
+                total_time_ms = (time.perf_counter() - start_time)
+                memory_usage = psutil.Process().memory_info().rss
                 
                 # Calculate steps and weight
                 actions = []
@@ -74,8 +68,8 @@ def depth_first_search(problem):
                     "nodes": nodes_expanded,
                     "steps": child.num_steps,
                     "weight": weight,
-                    "time_ms": round(total_time_ms, 2),
-                    "memory_mb": round(peak_memory / (1024 * 1024), 2)
+                    "time_ms": round(total_time_ms, 2)*1000,
+                    "memory_mb": round(memory_usage / (1024 * 1024), 2)
                 }
             
             # If the state has not been explored, add it to the frontier
@@ -84,16 +78,14 @@ def depth_first_search(problem):
                 explored.add(hash_code)
     
     # Return metrics if no solution is found
-    end_time = time.time()
-    total_time_ms = (end_time - start_time) * 1000
-    _, peak_memory = tracemalloc.get_traced_memory()
-    tracemalloc.stop()
+    total_time_ms = (time.perf_counter() - start_time)
+    memory_usage = psutil.Process().memory_info().rss
     
     return {
         "solution": None,
         "nodes": nodes_expanded,
         "steps": 0,
         "weight": 0,
-        "time_ms": round(total_time_ms, 2),
-        "memory_mb": round(peak_memory / (1024 * 1024), 2)
+        "time_ms": round(total_time_ms, 2)*1000,
+        "memory_mb": round(memory_usage / (1024 * 1024), 2)
     }

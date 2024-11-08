@@ -1,16 +1,18 @@
-import time
-import tracemalloc
+# import time
+# import tracemalloc
 from modeling import Node, expand
 from utils import PriorityQueue
+import time
+import psutil
 
 def best_first_search(problem, f):
     """Implements Best-First Search with node, time, specific memory, steps, and weight tracking."""
 
     # Track performance metrics
-    start_time = time.time()
+    start_time = time.perf_counter()
     
-    # Start memory tracking with tracemalloc
-    tracemalloc.start()
+    # # Start memory tracking with tracemalloc
+    # tracemalloc.start()
     
     # Create the initial node
     node = Node(state=problem.initial_state)
@@ -30,10 +32,12 @@ def best_first_search(problem, f):
         
         # If the goal state is reached, collect metrics and return results
         if problem.goal_test(node.state):
-            end_time = time.time()
-            total_time_ms = (end_time - start_time) * 1000
-            _, peak_memory = tracemalloc.get_traced_memory()
-            tracemalloc.stop()
+            # end_time = time.time()
+            # total_time_ms = (end_time - start_time) * 1000
+            time_elapsed = (time.perf_counter() - start_time)
+            # _, peak_memory = tracemalloc.get_traced_memory()
+            # tracemalloc.stop()
+            memory_usage = psutil.Process().memory_info().rss
             
             # Calculate steps by tracing back from the goal node to the root
             actions = []
@@ -53,8 +57,10 @@ def best_first_search(problem, f):
                 "nodes": nodes_expanded,
                 "steps": node.num_steps,
                 "weight": weight,
-                "time_ms": round(total_time_ms, 2),
-                "memory_mb": round(peak_memory / (1024 * 1024), 2)
+                "time_ms": time_elapsed*1000,
+                "memory_mb": (round(memory_usage / (1024 * 1024), 2))
+                # "time_ms": round(total_time_ms, 2),
+                # "memory_mb": round(peak_memory / (1024 * 1024), 2)
             }
         
         # Expand the current node
@@ -68,16 +74,24 @@ def best_first_search(problem, f):
                 frontier.put(child, f(child))  # Add the child to the frontier
     
     # Return metrics if no solution is found
-    end_time = time.time()
-    total_time_ms = (end_time - start_time) * 1000
-    _, peak_memory = tracemalloc.get_traced_memory()
-    tracemalloc.stop()
+    # end_time = time.time()
+    # total_time_ms = (end_time - start_time) * 1000
+    # _, peak_memory = tracemalloc.get_traced_memory()
+    # tracemalloc.stop()
+    time_elapsed = (time.perf_counter() - start_time)
+            # _, peak_memory = tracemalloc.get_traced_memory()
+            # tracemalloc.stop()
+    memory_usage = psutil.Process().memory_info().rss
+
+    print(node.state)
     
     return {
         "solution": None,
         "nodes": nodes_expanded,
         "steps": 0,
         "weight": 0,
-        "time_ms": round(total_time_ms, 2),
-        "memory_mb": round(peak_memory / (1024 * 1024), 2)
+        "time_ms": time_elapsed*1000,
+        "memory_mb": (round(memory_usage / (1024 * 1024), 2))
+        # "time_ms": round(total_time_ms, 2),
+        # "memory_mb": round(peak_memory / (1024 * 1024), 2)
     }
