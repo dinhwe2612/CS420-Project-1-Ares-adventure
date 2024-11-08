@@ -1,29 +1,32 @@
 from .GameMode import GameMode
 import pygame
-from ui import Button
-
-
-BUTTON_SETTINGS = {
-    'hover'   : (155,155,155),
-    'font'    : 'BD_Cartoon_Shout',
-    'fg'      : (0,0,0),
-    'bg'      : (255,255,255),
-    'border'  : False,
-    'fontsize': 25
-}
+import pygame_gui
+from pygame_gui.elements import UIButton
 
 class MenuGameMode(GameMode):
-    def __init__(self, observer):
-        super().__init__(observer)
-        bfs_btn = Button(position=(400, 140), text='BFS', width=100, height=50, command=lambda: self.notifyLoadPlayGameMode('bfs'), **BUTTON_SETTINGS)
-        self.addButton(bfs_btn)
-        dfs_btn = Button(position=(400, 240), text='DFS', width=100, height=50, command=lambda: self.notifyLoadPlayGameMode('dfs'), **BUTTON_SETTINGS)
-        self.addButton(dfs_btn)
-        ucs_btn = Button(position=(400, 340), text='UCS', width=100, height=50, command=lambda: self.notifyLoadPlayGameMode('ucs'), **BUTTON_SETTINGS)
-        self.addButton(ucs_btn)
-        astar_btn = Button(position=(400, 440), text='A*', width=100, height=50, command=lambda: self.notifyLoadPlayGameMode('astar'), **BUTTON_SETTINGS)
-        self.addButton(astar_btn)
-
+    def __init__(self, observer, screenHeight, screenWidth):
+        super().__init__(observer, screenHeight, screenWidth)
+        
+        self.start_button = UIButton(relative_rect=pygame.Rect(0, 140, 160, 100),
+                                    text='Start', manager=self.ui_manager,
+                                    anchors={'centerx': 'centerx'})
+        self.exit_button = UIButton(relative_rect=pygame.Rect(0, 90, 160, 100),
+                                    text='Exit', manager=self.ui_manager,
+                                    anchors={
+                                        'centerx': 'centerx',
+                                        'top_target': self.start_button
+                                        })
+        
+    def processInput(self, event):
+        super().processInput(event)
+        if event.type == pygame_gui.UI_BUTTON_PRESSED:
+            if event.ui_element ==  self.start_button:
+                self.notifyLoadPlayGameMode()
+            if event.ui_element == self.exit_button:
+                self.observer.applicationExit()
+    def update(self, delta_time):
+        super().update(delta_time)
+    
     def render(self, surface):
         surface.fill((0, 0, 0))
         super().render(surface)

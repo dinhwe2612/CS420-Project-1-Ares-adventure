@@ -13,7 +13,7 @@ class PlayerMoveCommands(Command):
     def run(self):
         self.currentCommand.run()
         if (self.currentCommand.isDone):
-            
+            self.currentCommand = None
             command = self.state.getCommand()
             print(command)
             if (command != None):
@@ -21,4 +21,4 @@ class PlayerMoveCommands(Command):
                 self.state.removeCommand()
     
     def isDone(self):
-        return self.state.getCommand() == None
+        return self.currentCommand == None

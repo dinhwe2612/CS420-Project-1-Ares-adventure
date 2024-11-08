@@ -5,6 +5,7 @@ from .StoneMoveCommand import StoneMoveCommand
 class PlayerMoveCommand(Command):
     def __init__(self, state, command):
         self.player = state.getPlayer()
+        self.length = state.getScreenHeight()
         self.targetFlatPosition = self.player.getFlatPosition()
         if (command.lower() == 'r'):
             self.player.setFlip(False)
@@ -17,10 +18,9 @@ class PlayerMoveCommand(Command):
         elif (command.lower() == 'u'):
             self.direction = Vector2(0, -1)
             self.targetFlatPosition = (self.targetFlatPosition[0] - 1, self.targetFlatPosition[1])
-        else:
+        elif (command.lower() == 'd'):
             self.direction = Vector2(0, 1)
             self.targetFlatPosition = (self.targetFlatPosition[0] + 1, self.targetFlatPosition[1])
-        
         # check if the target position is out of map
         if (self.targetFlatPosition[0] < 0 or self.targetFlatPosition[0] >= state.getNumRow() or self.targetFlatPosition[1] < 0 or self.targetFlatPosition[1] >= state.getNumCol()):
             raise Exception("Player invalid move: out of map")
@@ -40,7 +40,7 @@ class PlayerMoveCommand(Command):
         self.player.move(self.direction)
         if (self.stoneCommand != None):
             self.stoneCommand.run()
-        if (abs((self.player.getPosition() - self.targetPosition).length()) < 0.1):
+        if (abs((self.player.getPosition() - self.targetPosition).length()) < 0.001 * self.length):
             self.player.setPosition(self.targetPosition)
             self.player.setState("standing")
             self.player.setFlatPosition(self.targetFlatPosition)

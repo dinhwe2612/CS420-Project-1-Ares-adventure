@@ -9,37 +9,37 @@ class UserInterface(GameModeObserver):
         self.SCREEN_WIDTH = 800
         self.SCREEN_HEIGHT = 600
         self.SCREEN_WIDTH_GAME = 600
-        self.SCREEN_HEIGHT_GAME = 550
+        self.SCREEN_HEIGHT_GAME = 600
 
         pygame.init()
 
         self.window = pygame.display.set_mode((self.SCREEN_WIDTH, self.SCREEN_HEIGHT))
-
-        self.ui_manager = pygame_gui.UIManager((self.SCREEN_WIDTH, self.SCREEN_HEIGHT))
         
         self.gameState = None
-        self.gameMode = MenuGameMode(self)
+        self.gameMode = MenuGameMode(self, self.SCREEN_HEIGHT, self.SCREEN_WIDTH)
         self.prevGameMode = None
 
         self.clock = pygame.time.Clock()
         self.running = True
 
-    def loadPlayGameMode(self, algo):
-        self.gameState = GameState(self.SCREEN_WIDTH_GAME, self.SCREEN_HEIGHT_GAME, 5, 5, [
-            ['#', '#', '#', '#', '#'],
-            ['#', '$', '$', '$', '#'],
-            ['#', '$', ' ', '$', '#'],
-            ['#', '$', '$', ' ', '#'],
-            ['#', '@', ' ', ' ', '#'],
-        ], [1, 1, 1, 1, 1, 1, 1, 1], 'rur')
-        self.gameMode = PlayGameMode(self, self.gameState)
+    def loadPlayGameMode(self):
+        self.gameState = GameState(self.SCREEN_WIDTH_GAME, self.SCREEN_HEIGHT_GAME, 7, 10, [
+            ['#', '#', '#', '#', '#', '#', '#', '#', '#', '#'],
+            ['#', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '#'],
+            ['#', ' ', '$', ' ', ' ', '$', ' ', ' ', ' ', '#'],
+            ['#', ' ', ' ', ' ', '.', ' ', '.', ' ', ' ', '#'],
+            ['#', ' ', ' ', ' ', '@', ' ', ' ', '#', ' ', '#'],
+            ['#', ' ', '$', ' ', ' ', '.', ' ', ' ', ' ', '#'],
+            ['#', '#', '#', '#', '#', '#', '#', '#', '#', '#']
+        ], [2, 3, 1], 'llldRRRuullluRRurDRurD')
+        self.gameMode = PlayGameMode(self, self.gameState, self.SCREEN_HEIGHT, self.SCREEN_WIDTH)
 
     def showMenuRequested(self):
-        self.gameMode = MenuGameMode(self)
+        self.gameMode = MenuGameMode(self, self.SCREEN_HEIGHT, self.SCREEN_WIDTH)
 
     def showMessageBox(self, message):
         self.prevGameMode = self.gameMode
-        self.gameMode = MessageGameMode(self, message)
+        self.gameMode = MessageGameMode(self, message, self.SCREEN_HEIGHT, self.SCREEN_WIDTH)
 
     def backRequested(self):
         self.gameMode = self.prevGameMode
@@ -47,11 +47,12 @@ class UserInterface(GameModeObserver):
 
     def run(self):
         while self.running:
-            self.gameMode.processInput()
-            self.gameMode.update()
+            for event in pygame.event.get():
+                self.gameMode.processInput(event)
+            time_delta = self.clock.tick(60) / 1000.0
+            self.gameMode.update(time_delta)
             self.gameMode.render(self.window)
             pygame.display.update()
-            time_delta = self.clock.tick(60) / 1000.0
             
         pygame.quit()
 

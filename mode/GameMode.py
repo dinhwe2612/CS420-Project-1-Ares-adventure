@@ -1,16 +1,10 @@
 import pygame
+import pygame_gui
 
 class GameMode():
-    def __init__(self, observer):
+    def __init__(self, observer, screenHeight, screenWidth):
         self.observer = observer
-        self.buttons = []
-        self.textviews = []
-
-    def addButton(self, button):
-        self.buttons.append(button)
-
-    def addTextView(self, textview):
-        self.textviews.append(textview)
+        self.ui_manager = pygame_gui.UIManager((screenWidth, screenHeight), 'assets/theme.json')
 
     def notifyGameFinished(self):
         self.observer.gameFinished()
@@ -21,8 +15,8 @@ class GameMode():
     def notifyShowMenuRequested(self):
         self.observer.showMenuRequested()
 
-    def notifyLoadPlayGameMode(self, algo):
-        self.observer.loadPlayGameMode(algo)
+    def notifyLoadPlayGameMode(self):
+        self.observer.loadPlayGameMode()
     
     def notifyShowMessageBox(self, message):
         self.observer.showMessageBox(message)
@@ -30,20 +24,13 @@ class GameMode():
     def notifyBackRequested(self):
         self.observer.backRequested()
 
-    def processInput(self):
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                self.observer.applicationExit()
-            for button in self.buttons:
-                button.get_event(event)
-        
+    def processInput(self, event):
+        if event.type == pygame.QUIT:
+            self.observer.applicationExit()
+        self.ui_manager.process_events(event)
     
-    def update(self):
-        for button in self.buttons:
-            button.update()
+    def update(self, delta_time):
+        self.ui_manager.update(delta_time)
     
     def render(self, surface):
-        for button in self.buttons:
-            button.render(surface)
-        for textview in self.textviews:
-            textview.render(surface)
+        self.ui_manager.draw_ui(surface)
