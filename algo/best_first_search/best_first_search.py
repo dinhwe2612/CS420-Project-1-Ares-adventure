@@ -1,8 +1,16 @@
+import time
+import tracemalloc
 from modeling import Node, expand
 from utils import PriorityQueue
 
 def best_first_search(problem, f):
-    """Implements Best-First Search using the evaluation function `f`."""
+    """Implements Best-First Search with node, time, specific memory, steps, and weight tracking."""
+
+    # Track performance metrics
+    start_time = time.time()
+    
+    # Start memory tracking with tracemalloc
+    tracemalloc.start()
     
     # Create the initial node
     node = Node(state=problem.initial_state)
@@ -11,16 +19,43 @@ def best_first_search(problem, f):
     frontier = PriorityQueue()
     frontier.put(node, f(node))
     
-    # A lookup table to store reached nodes (i.e., visited states) using hash values
+    # Track the number of nodes expanded
+    nodes_expanded = 0
     reached = {hash(problem.initial_state): node}
     
     while not frontier.is_empty():
         # Get the node with the lowest f value from the frontier
         node = frontier.get()
+        nodes_expanded += 1  # Count each node expanded
         
-        # If the goal state is reached, return the node
+        # If the goal state is reached, collect metrics and return results
         if problem.goal_test(node.state):
-            return node
+            end_time = time.time()
+            total_time_ms = (end_time - start_time) * 1000
+            _, peak_memory = tracemalloc.get_traced_memory()
+            tracemalloc.stop()
+            
+            # Calculate steps by tracing back from the goal node to the root
+            actions = []
+            weight = []
+            current = node
+            while current.parent is not None:
+                actions.append(current.action)
+                weight.append(current.path_cost)
+                current = current.parent
+            
+            actions.reverse()  # Reverse the action list to get the correct order
+            actions = ''.join(actions)
+            weight.reverse()
+
+            return {
+                "solution": actions,
+                "nodes": nodes_expanded,
+                "steps": node.num_steps,
+                "weight": weight,
+                "time_ms": round(total_time_ms, 2),
+                "memory_mb": round(peak_memory / (1024 * 1024), 2)
+            }
         
         # Expand the current node
         for child in expand(problem, node):
@@ -32,4 +67,19 @@ def best_first_search(problem, f):
                 reached[s_hash] = child  # Mark the state as reached with the new path cost
                 frontier.put(child, f(child))  # Add the child to the frontier
     
-    return None  # Return failure if no solution is found
+    # Return metrics if no solution is found
+    end_time = time.time()
+    total_time_ms = (end_time - start_time) * 1000
+    _, peak_memory = tracemalloc.get_traced_memory()
+    tracemalloc.stop()
+
+    print(node.state)
+    
+    return {
+        "solution": None,
+        "nodes": nodes_expanded,
+        "steps": 0,
+        "weight": 0,
+        "time_ms": round(total_time_ms, 2),
+        "memory_mb": round(peak_memory / (1024 * 1024), 2)
+    }

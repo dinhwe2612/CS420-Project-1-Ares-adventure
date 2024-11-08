@@ -1,37 +1,99 @@
 from modeling import Node, expand
 import queue
+import time
+import tracemalloc
 
 def breadth_first_search(problem):
-    """Implements Breadth-First search."""
+    """Implements Breadth-First Search with node, time, specific memory, steps, and weight tracking."""
+    
+    # Track performance metrics
+    start_time = time.time()
+    
+    # Start memory tracking with tracemalloc
+    tracemalloc.start()
     
     # Create the initial node
     node = Node(state=problem.initial_state)
     
+    # If the initial state is the goal, return immediately
     if problem.goal_test(node.state):
-        return node
+        end_time = time.time()
+        total_time_ms = (end_time - start_time) * 1000
+        _, peak_memory = tracemalloc.get_traced_memory()
+        tracemalloc.stop()  # Stop tracemalloc to avoid further tracking
+        
+        return {
+            "solution": [],
+            "nodes": 0,
+            "steps": 0,
+            "weight": 0,
+            "time_ms": round(total_time_ms, 2),
+            "memory_mb": round(peak_memory / (1024 * 1024), 2)  # Convert bytes to MB
+        }
     
-    # Create a queue
+    # Create a queue and add the initial node
     frontier = queue.Queue()
     frontier.put(node)
     
-    # A lookup table to store reached nodes (i.e., visited states)
-    reached = {problem.initial_state: node}
+    # Track the number of nodes expanded
+    nodes_expanded = 0
+    reached = {hash(problem.initial_state): node}
     
+    # Main search loop
     while not frontier.empty():
-        # Get the node 
         node = frontier.get()
+        nodes_expanded += 1  # Count each node expanded
         
         # Expand the current node
         for child in expand(problem, node):
             s = child.state
+            s_hash = hash(s)  # Get the hash of the state
             
-            # If the goal state is reached, return the child
+            # If the goal state is reached, collect metrics and return results
             if problem.goal_test(s):
-                return child
+                end_time = time.time()
+                total_time_ms = (end_time - start_time) * 1000
+                _, peak_memory = tracemalloc.get_traced_memory()
+                tracemalloc.stop()  # Stop tracemalloc
+
+                # Calculate steps by tracing back from the goal node to the root
+                actions = []
+                weight = []
+                current = child
+                while current.parent is not None:
+                    actions.append(current.action)
+                    weight.append(current.path_cost)
+                    current = current.parent
+                
+                actions.reverse()  # Reverse the action list to get the correct order
+                actions = ''.join(actions)
+                weight.reverse()
+
+                return {
+                    "solution": actions,
+                    "nodes": nodes_expanded,
+                    "steps": child.num_steps,
+                    "weight": weight,
+                    "time_ms": round(total_time_ms, 2),
+                    "memory_mb": round(peak_memory / (1024 * 1024), 2)
+                }
             
-            # Check if the new state has not been reached or has a lower path cost
-            if s not in reached:
-                reached[s] = child  # Mark the state as reached with the new path cost
-                frontier.put(child)  # Add the child to the frontier
+            # Check if the state has not been reached before
+            if s_hash not in reached:
+                reached[s_hash] = child
+                frontier.put(child)
     
-    return None  # Return failure if no solution is found
+    # Return metrics if no solution is found
+    end_time = time.time()
+    total_time_ms = (end_time - start_time) * 1000
+    _, peak_memory = tracemalloc.get_traced_memory()
+    tracemalloc.stop()  # Stop tracemalloc
+    
+    return {
+        "solution": None,
+        "nodes": nodes_expanded,
+        "steps": 0,
+        "weight": 0,
+        "time_ms": round(total_time_ms, 2),
+        "memory_mb": round(peak_memory / (1024 * 1024), 2)
+    }
