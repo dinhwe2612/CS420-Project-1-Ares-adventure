@@ -1,5 +1,7 @@
 class GameModeObserver:
-    def loadPlayGameMode(self, algo):
+    def loadPlayGameMode(self):
+        pass
+    def run_algorithm(self, grid, stone_weights, algo):
         pass
     def gameFinished(self):
         pass
@@ -12,4 +14,6 @@ class GameModeObserver:
     def showMessageBox(self, message):
         pass
     def backRequested(self):
+        pass
+    def run_algorithm(self):
         pass

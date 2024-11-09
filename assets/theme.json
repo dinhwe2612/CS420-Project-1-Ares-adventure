@@ -57,5 +57,16 @@
              "border_width": "1",
              "open_button_width": "100" 
          }
+     },
+     "text_box":
+     {
+         "misc":
+         {
+             "border_width": "1",
+             "padding": "10,10",
+             "link_normal_underline": "0",
+             "link_hover_underline": "1",
+             "line_spacing": "1.2"
+         }
      }
 }

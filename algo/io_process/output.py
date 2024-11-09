@@ -1,12 +1,12 @@
 import os
 from concurrent.futures import ProcessPoolExecutor, as_completed
 from .input import read_file
-from modeling import SokobanProblem
-from heuristic import f
-from bfs import breadth_first_search
-from dfs import depth_first_search
-from ucs import uniform_cost_search
-from best_first_search import best_first_search
+from algo.modeling import SokobanProblem
+from algo.heuristic import f
+from algo.bfs import breadth_first_search
+from algo.dfs import depth_first_search
+from algo.ucs import uniform_cost_search
+from algo.best_first_search import best_first_search
 
 def process_result(result):
     # Extract the solution node if found

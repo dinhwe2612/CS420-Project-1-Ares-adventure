@@ -1,7 +1,7 @@
 import time
 import psutil
 # import tracemalloc
-from modeling import Node, expand
+from algo.modeling import Node, expand
 
 def depth_first_search(problem):
     """Implements Depth-First Search with node, time, specific memory, steps, and weight tracking."""

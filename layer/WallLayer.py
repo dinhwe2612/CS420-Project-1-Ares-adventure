@@ -18,21 +18,24 @@ class WallLayer(Layer):
             position = self.state.getPosition(grassFlatPosition)
             position = (position.x - self.size.x / 2, position.y - self.size.y / 2)
             surface.blit(self.image, position)
-            
-        for i in range(self.state.numOldRow):
-            for j in range(self.state.numOldCol):
-                if i != 0 and j != 0 and i + 1 != self.state.numOldRow and j + 1 != self.state.numOldCol:
+        row_min = self.state.activeRow
+        row_max = self.state.activeRow + self.state.activeNumRow - 1
+        col_min = self.state.activeCol
+        col_max = self.state.activeCol + self.state.activeNumCol - 1
+        for i in range(row_min, row_max + 1):
+            for j in range(col_min, col_max + 1):
+                if i != row_min and j != col_min and i != row_max and j != col_max:
                     continue
                 image = self.fence_images[0]
-                if i == 0 and j == 0:
+                if i == row_min and j == col_min:
                     image = self.fence_images[2]
-                elif i == 0 and j + 1 == self.state.numOldCol:
+                elif i == row_min and j == col_max:
                     image = self.fence_images[3]
-                elif i + 1 == self.state.numOldRow and j == 0:
+                elif i == row_max and j == col_min:
                     image = self.fence_images[4]
-                elif i + 1 == self.state.numOldRow and j + 1 == self.state.numOldCol:
+                elif i == row_max and j == col_max:
                     image = self.fence_images[5]
-                elif i == 0 or i + 1 == self.state.numOldRow:
+                elif i == row_min or i == row_max:
                     image = self.fence_images[1]
                 position = self.state.getPosition((i, j))
                 position = (position.x - self.size.x / 2, position.y - self.size.y / 2)

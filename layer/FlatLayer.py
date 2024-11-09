@@ -26,12 +26,16 @@ class FlatLayer(Layer):
         self.flat_images_render = [] 
         num_rows = self.state.getNumRow()  
         num_cols = self.state.getNumCol()
+        row_min = self.state.activeRow
+        row_max = self.state.activeRow + self.state.activeNumRow - 1
+        col_min = self.state.activeCol
+        col_max = self.state.activeCol + self.state.activeNumCol - 1
         for i in range(num_rows):
             row = []
             for j in range(num_cols):
-                if i >= self.state.numOldRow or j >= self.state.numOldCol:
+                if i >= row_max + 1 or j >= col_max + 1 or i < row_min or j < col_min:
                     row.append(self.get_random_flat_water())
-                elif i == 0 or j == 0 or i + 1 == self.state.numOldRow or j + 1 == self.state.numOldCol:
+                elif i == row_min or j == col_min or i == row_max or j == col_max:
                     row.append(self.get_random_flat_dirt())
                 else:
                     row.append(self.get_random_flat_grass())

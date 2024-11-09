@@ -31,38 +31,21 @@ class UserInterface(GameModeObserver):
 
         self.clock = pygame.time.Clock()
         self.running = True
+        
+    def loadPlayGameMode(self):
+        self.gameMode = PlayGameMode(self, self.SCREEN_HEIGHT, self.SCREEN_WIDTH, self.SCREEN_HEIGHT_GAME, self.SCREEN_WIDTH_GAME)
 
-    def loadPlayGameMode(self, level, algo):
+    def run_algorithm(self, grid, stone_weights, algo):
         # Define a callback to handle the result after the algorithm completes
         def on_algorithm_complete(result):
             # Extract path and cumulative weight
             path = result.get("solution")
             weight = result.get("weight")
-
-            if path:
-                # Initialize the game state with the loaded grid, weights, and solution path
-                self.gameState = GameState(
-                    screen_width=self.SCREEN_WIDTH_GAME,
-                    screen_height=self.SCREEN_HEIGHT_GAME,
-                    rows=len(initial_grid),
-                    columns=len(initial_grid[0]) if initial_grid else 0,
-                    grid=initial_grid,
-                    stone_weights=stone_weights,
-                    path=path
-                )
-                # Set the game mode
-                self.gameMode = PlayGameMode(self, self.gameState)
-            else:
-                print("No solution found")
+            print(path, weight)
+            self.gameMode.run_solutionPath(path, weight)
 
         # Define the worker function to run the algorithm in a separate thread
-        def algorithm_worker():
-            # Read map and weights from the file
-            if 1 <= level <= 9:
-                initial_grid, stone_weights = read_level(f"input-0{level}.txt")
-            else:
-                initial_grid, stone_weights = read_level("input-10.txt")
-
+        def algorithm_worker(initial_grid, stone_weights, algo):
             # Convert grid to tuple format if needed
             initial_grid = turnIntoTuple(initial_grid)
 
@@ -83,7 +66,7 @@ class UserInterface(GameModeObserver):
             on_algorithm_complete(result)
 
         # Start the algorithm in a new thread
-        threading.Thread(target=algorithm_worker, daemon=True).start()
+        threading.Thread(target=algorithm_worker, args=(grid, stone_weights, algo), daemon=True).start()
 
     def showMenuRequested(self):
         self.gameMode = MenuGameMode(self, self.SCREEN_HEIGHT, self.SCREEN_WIDTH)

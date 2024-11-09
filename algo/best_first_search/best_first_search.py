@@ -1,7 +1,7 @@
 # import time
 # import tracemalloc
-from modeling import Node, expand
-from utils import PriorityQueue
+from algo.modeling import Node, expand
+from algo.utils import PriorityQueue
 import time
 import psutil
 

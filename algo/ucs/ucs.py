@@ -1,8 +1,8 @@
 import time
 import tracemalloc
-from modeling import Node, expand
-from utils import PriorityQueue
-from best_first_search import best_first_search
+from algo.modeling import Node, expand
+from algo.utils import PriorityQueue
+from algo.best_first_search import best_first_search
 
 # Define the evaluation function f for UCS (just the path_cost for UCS)
 def f(node):
