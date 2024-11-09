@@ -82,8 +82,6 @@ def best_first_search(problem, f):
             # _, peak_memory = tracemalloc.get_traced_memory()
             # tracemalloc.stop()
     memory_usage = psutil.Process().memory_info().rss
-
-    print(node.state)
     
     return {
         "solution": None,
