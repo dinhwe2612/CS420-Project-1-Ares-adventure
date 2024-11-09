@@ -77,7 +77,7 @@ def generate_output_for_input_file(input_file):
     problem = SokobanProblem(initial_grid=initial_grid, stone_weights=stone_weights)
     
     # Directory for output files
-    output_dir = "output"
+    output_dir = "../output"
     os.makedirs(output_dir, exist_ok=True)  # Ensure output directory exists
     output_file = os.path.join(output_dir, f"output-{input_index:02}.txt")
     

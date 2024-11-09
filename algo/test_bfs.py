@@ -4,16 +4,16 @@ from heuristic import f
 from io_process import read_file
 from io_process import turnIntoTuple
 
-# Define the initial Sokoban state (grid layout)
-initial_grid = (
-    ('#', '#', '#', '#'),
-    (' ', '@', ' ', '#'),
-    (' ', '$', '.', '#'),
-    ('#', '#', '#', '#')
-)
+# # Define the initial Sokoban state (grid layout)
+# initial_grid = (
+#     ('#', '#', '#', '#'),
+#     (' ', '@', ' ', '#'),
+#     (' ', '$', '.', '#'),
+#     ('#', '#', '#', '#')
+# )
 
-# Define stone weights (one stone with weight 1)
-stone_weights = [1]
+# # Define stone weights (one stone with weight 1)
+# stone_weights = [1]
 
 initial_grid, stone_weights = read_file("../input/input-05.txt")
 initial_grid = turnIntoTuple(initial_grid)
