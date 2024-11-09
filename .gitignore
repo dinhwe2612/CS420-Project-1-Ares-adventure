@@ -3,3 +3,6 @@
 *.pyc
 *.pyc
 *.pyc
+algo/best_first_search/__pycache__/best_first_search.cpython-312.pyc
+algo/deadlocks/__pycache__/__init__.cpython-312.pyc
+*.pyc

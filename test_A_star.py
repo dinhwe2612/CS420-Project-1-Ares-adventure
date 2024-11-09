@@ -1,8 +1,8 @@
-from modeling.problem import SokobanProblem
-from best_first_search import best_first_search
-from heuristic import f
-from io_process import read_file
-from io_process import turnIntoTuple
+from algo import SokobanProblem
+from algo import best_first_search
+from algo import f
+from algo import read_file
+from algo import turnIntoTuple
 
 # Define the initial Sokoban state (grid layout)
 # initial_grid = (
@@ -18,7 +18,7 @@ from io_process import turnIntoTuple
 # Define stone weights
 # stone_weights = [2, 3, 1]
 
-initial_grid, stone_weights = read_file("../input/input-04.txt")
+initial_grid, stone_weights = read_file("input/input-04.txt")
 # initial_grid, stone_weights = read_file("../algo/test/test3.txt")
 # initial_grid = turnIntoTuple(initial_grid)
 

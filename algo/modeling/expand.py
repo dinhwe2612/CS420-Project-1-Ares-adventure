@@ -1,5 +1,5 @@
 from .node import Node
-from deadlocks import detect_deadlock
+from algo.deadlocks import detect_deadlock
 
 def expand(problem, node):
     """Generates the child nodes for each valid action."""

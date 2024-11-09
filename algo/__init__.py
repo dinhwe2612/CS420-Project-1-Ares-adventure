@@ -6,4 +6,4 @@ from .best_first_search import best_first_search
 from .io_process import read_level
 from .io_process import turnIntoTuple
 from .heuristic import f
-from .io_process import process_result
+from .io_process import process_result, read_file, turnIntoTuple
