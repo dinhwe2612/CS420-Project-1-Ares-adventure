@@ -41,8 +41,11 @@ class UserInterface(GameModeObserver):
             # Extract path and cumulative weight
             path = result.get("solution")
             weight = result.get("weight")
+            node = result.get("nodes_expanded")
+            time = result.get("time_ms")
+            mem = result.get("memory_mb")
             print(path, weight)
-            self.gameMode.run_solutionPath(path, weight)
+            self.gameMode.run_solutionPath(path, weight, node, time, mem)
 
         # Define the worker function to run the algorithm in a separate thread
         def algorithm_worker(initial_grid, stone_weights, algo):

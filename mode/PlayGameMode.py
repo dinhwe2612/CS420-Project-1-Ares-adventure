@@ -17,8 +17,6 @@ class PlayGameMode(GameMode):
         self.screenHeightGame = screenHeightGame
         self.screenWidthGame = screenWidthGame
         
-        self.load_map("input-01.txt")
-        
         self.back_button = UIButton(relative_rect=pygame.Rect(630, 140, 140, 40),
                                     text='Back',
                                     manager=self.ui_manager)
@@ -26,8 +24,8 @@ class PlayGameMode(GameMode):
         self.run_button = UIButton(relative_rect=pygame.Rect(630, 90, 140, 40),
                                    text = 'Run',
                                    manager=self.ui_manager)
-        self.steps_text = """<p>Node: </p><p>Time (ms): </p><p>Memory (MB): </p><p>Steps: {num_steps}</p><p>Path Cost: {path_cost}</p><p>Path Solution: </p><p>{action_log}</p>"""
-        updated_text = self.steps_text.format(num_steps='', path_cost='', action_log='')
+        self.steps_text = """<p>Node: {num_node}</p><p>Time (ms): {time_cost}</p><p>Memory (MB): {mem_cost}</p><p>Steps: {num_steps}</p><p>Path Cost: {path_cost}</p><p>Path Solution: </p><p>{action_log}</p>"""
+        updated_text = self.steps_text.format(num_node='', time_cost='', mem_cost='', num_steps='', path_cost='', action_log='')
         self.steps_textbox = UITextBox(
             relative_rect=pygame.Rect((610, 195), (180, 400)),  # Position and size
             html_text=updated_text,
@@ -67,12 +65,27 @@ class PlayGameMode(GameMode):
             container=self.loading_popup
         )
         self.loading_popup.hide()
+        
+        self.load_map("input-01.txt")
+    
+    def clear_data(self):
+        self.loading_popup.hide()
+        self.run_button.set_text('Start')
+        self.solution_path = None
+        self.weight_path = None
+        self.num_node = None
+        self.time_cost = None
+        self.mem_cost = None
+        self.start = False
 
-    def run_solutionPath(self, solutionPath, weightPath):
+    def run_solutionPath(self, solutionPath, weightPath, numNode, timeCost, memCost):
         self.loading_popup.hide()
         self.run_button.set_text('Pause')
         self.solution_path = solutionPath
         self.weight_path = weightPath
+        self.num_node = numNode
+        self.time_cost = timeCost
+        self.mem_cost = memCost
         self.start = True
         self.gameState.set_solutionPath(solutionPath, weightPath)
         try:
@@ -83,15 +96,14 @@ class PlayGameMode(GameMode):
             print(messageError)
     
     def load_map(self, mapPath):
+        if self.map == mapPath:
+            return
+        self.clear_data()
         self.grid, self.stone_weights = read_level("input/" + mapPath)
         for i in self.grid:
             print(i)
         print(self.stone_weights)
         self.gameState = GameState(self.screenHeightGame, self.screenWidthGame, self.grid, self.stone_weights)
-        if self.map != mapPath:
-            self.solution_path = None
-            self.map = mapPath
-        self.start = False
         self.commands = []
         self.layers = [
             FlatLayer(self.gameState.getFlatSize(), self.gameState),
@@ -134,10 +146,13 @@ class PlayGameMode(GameMode):
                 self.load_map(event.text)
                 
     def update_textbox(self):
+        num_node = self.num_node if self.num_node is not None else ""
+        time_cost = self.time_cost if self.time_cost is not None else ""
+        mem_cost = self.mem_cost if self.mem_cost is not None else ""
         num_steps = self.gameState.getStep() if self.gameState.getStep() is not None else ""
         path_cost = self.gameState.getPathCost() if self.gameState.getPathCost() is not None else ""
         action_log = self.gameState.action_log if self.gameState.action_log is not None else ""
-        updated_text = self.steps_text.format(num_steps=num_steps, path_cost=path_cost, action_log=action_log)
+        updated_text = self.steps_text.format(num_node=num_node, time_cost=time_cost, mem_cost=mem_cost, num_steps=num_steps, path_cost=path_cost, action_log=action_log)
         self.steps_textbox.set_text(updated_text)
 
     def update(self, delta_time):
