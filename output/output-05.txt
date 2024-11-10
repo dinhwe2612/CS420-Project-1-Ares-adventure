@@ -1,11 +1,15 @@
 BFS
-Error: 'int' object is not subscriptable
+Steps: 0, Weight: 0, Nodes: 3406, Time (ms): 238550.0, Memory (MB): 59.75
+No solution found
 
 DFS
-Error: 'int' object is not subscriptable
+Steps: 0, Weight: 0, Nodes: 3406, Time (ms): 220.0, Memory (MB): 59.77
+No solution found
 
 UCS
-Error: 'int' object is not subscriptable
+Steps: 0, Weight: 0, Nodes: 3411, Time (ms): 225.5892999964999, Memory (MB): 59.91
+No solution found
 
 A*
-Error: 'int' object is not subscriptable
+Steps: 0, Weight: 0, Nodes: 3412, Time (ms): 679.1925999932573, Memory (MB): 60.27
+No solution found
