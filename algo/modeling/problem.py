@@ -24,7 +24,7 @@ class SokobanProblem:
                     ares_position = (i, j)
         self.switch_distance = [pull_bfs(position, initial_grid, ares_position).run() for position in self.switch_positions]
         self.initial_state = State(initial_grid, stone_weight_map)
-        self.dead_square = self.is_dead_square(self.switch_distance) # A set of dead cells
+        self.dead_square = self.is_dead_square(self.switch_distance, initial_grid) # A set of dead cells
 
     def map_stone_weights(self, grid, stone_weights):
         """
@@ -209,13 +209,16 @@ class SokobanProblem:
                 elif cell =='.': 
                     switch_count += 1
         return switch_count == stone_count
-    def is_dead_square(self, switch_distance):
+    def is_dead_square(self, switch_distance, initial_grid):
         """
         Detects if a square is a dead square based on the switch distance matrix.
         """
         dead_square = set()
-        tmp = switch_distance[0]
-        temp_grid = [[0 for _ in range(len(tmp[0]))] for _ in range(len(tmp))]
+        temp_grid = []
+        
+        # Initialize the grid with zeros and the shape is the same as the initial grid
+        for row in initial_grid:
+            temp_grid.append([0] * len(row))
         # If a cell is unreachable from all switches, it is a dead square
         for switch in switch_distance:
             for i in range(len(switch)):

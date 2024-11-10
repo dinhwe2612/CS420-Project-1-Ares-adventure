@@ -150,39 +150,3 @@ def is_surrounded_by_walls_or_stones(grid, r, c):
         grid[r][c+1] if c < len(grid[r]) - 1 else '#'
     ]
     return all(cell == '#' or cell == '$' for cell in surrounding)
-        
-# Tutorial: goals: set of goals, walls: set of walls, paths: anything except walls 
-# directions = [u, d, l, r]
-# dead_squuare is a set of cells that will cause deadlock
-
-# def set_distance():
-# 	distanceToGoal = dict()
-# 	dead_squares = set()
-# 	for goal in goals:
-# 		distanceToGoal[goal] = dict()
-# 		for path in paths:
-# 			distanceToGoal[goal][path] = 1e9
-# 	queue = Queue()
-# 	for goal in goals:
-# 		distanceToGoal[goal][goal] = 0
-# 		queue.put(goal)
-# 		while not queue.empty():
-# 			position = queue.get()
-# 			for direction in directions:
-# 				boxPosition = (position[0] + direction.vector[0], position[1] + direction.vector[1])
-# 				playerPosition = (position[0] + 2*direction.vector[0], position[1] + 2*direction.vector[1])
-# 				if boxPosition in paths:
-# 					if distanceToGoal[goal][boxPosition] == 1e9:
-# 						if (boxPosition not in walls) and (playerPosition not in walls):
-# 							distanceToGoal[goal][boxPosition] = distanceToGoal[goal][position] + 1
-# 							queue.put(boxPosition)
-#
-# 	for path in paths:
-# 		ok = 1
-# 		for goal in goals:	
-# 			if distanceToGoal[goal][path] != 1e9:
-# 				ok = 0
-# 				break
-# 		if ok == 1:
-# 			dead_squares.add(path)
-# 	return distanceToGoal, dead_squares

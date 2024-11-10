@@ -2,8 +2,8 @@ import numpy as np
 from scipy.sparse import csr_matrix
 from scipy.sparse.csgraph import min_weight_full_bipartite_matching
 import sys
-# INT_MAX = int(sys.maxsize // 100)
-INT_MAX = 4294967295
+INT_MAX = int(sys.maxsize // 100)
+# INT_MAX = 4294967295
 
 def h(node, problem):
     stone_positions = list(node.state.stone_weight_map.keys())
