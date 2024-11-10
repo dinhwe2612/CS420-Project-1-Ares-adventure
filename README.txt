@@ -1,0 +1,1 @@
+In the terminal, change your direction to the project folder and simply run: python main.py to run our code!
