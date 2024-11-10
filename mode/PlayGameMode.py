@@ -142,8 +142,9 @@ class PlayGameMode(GameMode):
             else:
                 self.run_button.set_text('Continue')
         else:
+            print("Restart")
             self.load_map(self.map)
-            self.run_solutionPath(self.solution_path, self.weight_path)
+            self.run_solutionPath(self.solution_path, self.weight_path, self.num_node, self.time_cost, self.mem_cost)
             self.start = True
 
     def processInput(self, event):
