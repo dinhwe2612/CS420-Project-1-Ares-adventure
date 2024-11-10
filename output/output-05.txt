@@ -1,0 +1,11 @@
+BFS
+Error: 'int' object is not subscriptable
+
+DFS
+Error: 'int' object is not subscriptable
+
+UCS
+Error: 'int' object is not subscriptable
+
+A*
+Error: 'int' object is not subscriptable
