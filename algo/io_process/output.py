@@ -41,7 +41,7 @@ def format_result(algo_name, result):
     Formats the result of an algorithm in the specified output format.
     """
     steps = result.get("steps", 0)
-    weight = result.get("weight", 0)
+    weight = result.get("weight", 0)[-1]
     nodes = result.get("nodes", 0)
     time_ms = result.get("time_ms", 0.0)
     memory_mb = result.get("memory_mb", 0.0)

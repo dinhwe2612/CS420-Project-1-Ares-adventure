@@ -1,14 +1,15 @@
 BFS
-Steps: 12, Weight: [1, 2, 6, 7, 8, 9, 10, 11, 12, 13, 14, 18], Nodes: 71, Time (ms): 0.0, Memory (MB): 53.78
+Steps: 12, Weight: 18, Nodes: 71, Time (ms): 0.0, Memory (MB): 53.35
 luRluurrdrrD
 
 DFS
-Steps: 34, Weight: [1, 2, 3, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 23, 24, 25, 26, 27, 28, 29, 30, 34, 35, 36, 37, 38, 39, 40, 41, 42, 46], Nodes: 35, Time (ms): 0.0, Memory (MB): 53.79
+Steps: 34, Weight: 46, Nodes: 35, Time (ms): 0.0, Memory (MB): 53.36
 rrrUdlllluuurrrrDllullddRluurrrrdD
 
 UCS
-Steps: 12, Weight: [1, 2, 6, 7, 8, 9, 10, 11, 12, 13, 14, 18], Nodes: 84, Time (ms): 4.08439999591792, Memory (MB): 53.82
+Steps: 12, Weight: 18, Nodes: 84, Time (ms): 3.387500000826549, Memory (MB): 53.39
 luRluurrrrdD
 
 A*
-Error: f() missing 1 required positional argument: 'problem'
+Steps: 12, Weight: 18, Nodes: 260, Time (ms): 59.78290000348352, Memory (MB): 54.05
+luRluurrdrrD
