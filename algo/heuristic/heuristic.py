@@ -30,3 +30,24 @@ def f(node, problem):
     the heuristic value (number of misplaced stones).
     """
     return node.path_cost + h(node, problem)
+
+def find_ares(node):
+    grid = node.state.grid # Get the map
+    # Find Ares
+    rows = len(grid)
+    for r in range(rows):
+        cols = len(grid[r])
+        for c in range(cols):
+            if grid[r][c] == '@' or grid[r][c] == '+':
+                return (r, c)
+    return None
+
+def move_heuristic(node, problem):
+    ares_position = find_ares(node)
+    
+    
+
+    stone_positions = list(node.state.stone_weight_map.keys())
+    min_stone_distance = INT_MAX
+    for stone in stone_positions
+    
