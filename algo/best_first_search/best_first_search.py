@@ -4,6 +4,8 @@ from algo.modeling import Node, expand
 from algo.utils import PriorityQueue
 import time
 import psutil
+import sys
+INT_MAX = int(sys.maxsize // 100)
 
 def best_first_search(problem, f):
     """Implements Best-First Search with node, time, specific memory, steps, and weight tracking."""
@@ -70,6 +72,9 @@ def best_first_search(problem, f):
         for child in expand(problem, node):
             s = child.state
             s_hash = s.__hash__()  # Get the hash of the state
+
+            # if f(child) > INT_MAX:
+            #     continue
             
             # Check if the new state has not been reached or has a lower path cost
             if s_hash not in reached or child.path_cost < reached[s_hash].path_cost:
