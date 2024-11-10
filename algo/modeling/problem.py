@@ -1,6 +1,8 @@
 from .node import Node
 from .state import State
 from .pull_bfs import pull_bfs
+import sys
+INT_MAX = int(sys.maxsize // 100)
 
 class SokobanProblem:
     def __init__(self, initial_grid, stone_weights):
@@ -22,6 +24,7 @@ class SokobanProblem:
                     ares_position = (i, j)
         self.switch_distance = [pull_bfs(position, initial_grid, ares_position).run() for position in self.switch_positions]
         self.initial_state = State(initial_grid, stone_weight_map)
+        self.dead_square = self.is_dead_square(self.switch_distance) # A set of dead cells
 
     def map_stone_weights(self, grid, stone_weights):
         """
@@ -206,3 +209,15 @@ class SokobanProblem:
                 elif cell =='.': 
                     switch_count += 1
         return switch_count == stone_count
+    def is_dead_square(self, switch_distance):
+        """
+        Detects if a square is a dead square based on the switch distance matrix.
+        """
+        dead_square = set()
+        # If a cell is unreachable from all switches, it is a dead square
+        for r, row in enumerate(switch_distance):
+            for c, distances in enumerate(row):
+                if all(d == INT_MAX for d in distances):
+                    dead_square.add((r, c))
+        return dead_square
+    
