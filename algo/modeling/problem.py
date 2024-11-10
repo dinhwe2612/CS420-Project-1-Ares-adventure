@@ -48,16 +48,16 @@ class SokobanProblem:
         player_pos = self.find_player(state.grid)
 
         # Check U
-        if self.is_valid_move(state.grid, player_pos, (-1, 0))[1] and self.is_valid_move(state.grid, player_pos, (-1, 0))[1]:
+        if self.is_valid_move(state.grid, player_pos, (-1, 0))[1]:
             possible_actions.append('U')
         # Check D
-        if self.is_valid_move(state.grid, player_pos, (1, 0))[1] and self.is_valid_move(state.grid, player_pos, (1, 0))[1]:
+        if self.is_valid_move(state.grid, player_pos, (1, 0))[1]:
             possible_actions.append('D')
         # Check L
-        if self.is_valid_move(state.grid, player_pos, (0, -1))[1] and self.is_valid_move(state.grid, player_pos, (0, -1))[1]:
+        if self.is_valid_move(state.grid, player_pos, (0, -1))[1]:
             possible_actions.append('L')
         # Check R
-        if self.is_valid_move(state.grid, player_pos, (0, 1))[1] and self.is_valid_move(state.grid, player_pos, (0, 1))[1]:
+        if self.is_valid_move(state.grid, player_pos, (0, 1))[1]:
             possible_actions.append('R')
 
         # Check u

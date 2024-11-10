@@ -23,7 +23,7 @@ def best_first_search(problem, f):
     
     # Track the number of nodes expanded
     nodes_expanded = 0
-    reached = {hash(problem.initial_state): node}
+    reached = {problem.initial_state.__hash__(): node}
     
     while not frontier.is_empty():
         # Get the node with the lowest f value from the frontier
@@ -69,12 +69,16 @@ def best_first_search(problem, f):
         # Expand the current node
         for child in expand(problem, node):
             s = child.state
-            s_hash = hash(s)  # Get the hash of the state
+            s_hash = s.__hash__()  # Get the hash of the state
             
             # Check if the new state has not been reached or has a lower path cost
             if s_hash not in reached or child.path_cost < reached[s_hash].path_cost:
                 reached[s_hash] = child  # Mark the state as reached with the new path cost
                 cost = f(child)
+                # for row in s.grid:
+                #     print(row)
+                # print(f(child))
+                # print()
                 if cost < 0:
                     print("cost âm kìa pé")
                 frontier.put(child, cost)  # Add the child to the frontier
