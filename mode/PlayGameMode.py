@@ -12,8 +12,6 @@ class PlayGameMode(GameMode):
     def __init__(self, observer, screenHeight, screenWidth, screenHeightGame, screenWidthGame):
         super().__init__(observer, screenHeight, screenWidth)
         
-        self.map = None
-        
         self.screenHeightGame = screenHeightGame
         self.screenWidthGame = screenWidthGame
         
@@ -78,8 +76,9 @@ class PlayGameMode(GameMode):
             container=self.no_solution_popup
         )
         self.no_solution_popup.hide()
-        
+        self.map = None
         self.load_map("input-01.txt")
+        self.map = "input-01.txt"
     
     def clear_data(self):
         self.loading_popup.hide()
@@ -130,6 +129,20 @@ class PlayGameMode(GameMode):
         ]
         for layer in self.layers:
             self.gameState.addObserver(layer)
+    
+    def reset_map(self):
+        self.grid, self.stone_weights = read_level("input/" + self.map)
+        self.gameState = GameState(self.screenHeightGame, self.screenWidthGame, self.grid, self.stone_weights)
+        self.commands = []
+        self.layers = [
+            FlatLayer(self.gameState.getFlatSize(), self.gameState),
+            SwitchLayer(self.gameState.getFlatSize(), 'assets/switch_1.png', self.gameState),
+            WallLayer(self.gameState.getFlatSize(), 'assets/wall.png', self.gameState),
+            StoneLayer(self.gameState.getFlatSize(), 'assets/stone.png', self.gameState),
+            PlayerLayer(self.gameState.getFlatSize(), 'assets/player.json', self.gameState)
+        ]
+        for layer in self.layers:
+            self.gameState.addObserver(layer)
 
     def start_pressed(self):
         if self.solution_path == None:
@@ -142,8 +155,7 @@ class PlayGameMode(GameMode):
             else:
                 self.run_button.set_text('Continue')
         else:
-            print("Restart")
-            self.load_map(self.map)
+            self.reset_map()
             self.run_solutionPath(self.solution_path, self.weight_path, self.num_node, self.time_cost, self.mem_cost)
             self.start = True
 
