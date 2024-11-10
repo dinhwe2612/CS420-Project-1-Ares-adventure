@@ -80,6 +80,18 @@ class PlayGameMode(GameMode):
         self.load_map("input-01.txt")
         self.map = "input-01.txt"
     
+    def enable_elements(self, enable):
+        if enable:
+            self.back_button.enable()
+            self.run_button.enable()
+            self.dropdown_algo.enable()
+            self.dropdown_map.enable()
+        else:
+            self.back_button.disable()
+            self.run_button.disable()
+            self.dropdown_algo.disable()
+            self.dropdown_map.disable()
+    
     def clear_data(self):
         self.loading_popup.hide()
         self.run_button.set_text('Start')
@@ -188,6 +200,7 @@ class PlayGameMode(GameMode):
 
     def update(self, delta_time):
         super().update(delta_time)
+        self.enable_elements(not self.loading_popup._visible)
         if self.start:
             self.update_textbox()
             if self.commands == None:
