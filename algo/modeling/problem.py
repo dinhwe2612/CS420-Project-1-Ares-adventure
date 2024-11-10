@@ -152,7 +152,10 @@ class SokobanProblem:
 
         elif new_grid[new_r][new_c] == '*':
             stone_r, stone_c = new_r + dr, new_c + dc
-            new_grid[stone_r][stone_c] = '$'  # Move the stone
+            if new_grid[stone_r][stone_c] == '.':  # If the stone's new position is on a switch
+                new_grid[stone_r][stone_c] = '*'
+            else:
+                new_grid[stone_r][stone_c] = '$'  # Move the stone
             new_grid[new_r][new_c] = '+'  # Player is now on the switch
             # Update the stone weight map in the copied map
             new_stone_weight_map[(stone_r, stone_c)] = new_stone_weight_map.pop((new_r, new_c))
