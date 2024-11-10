@@ -10,7 +10,7 @@ def expand(problem, node):
         s_prime, action_cost = problem.result_and_cost(s, action)
 
         # Detect deadlock
-        if detect_deadlock(s_prime): 
+        if detect_deadlock(problem, s_prime): 
             continue
 
         # Calculate the cost of moving to the new state

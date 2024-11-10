@@ -1,4 +1,6 @@
-from queue import Queue
+import sys
+INT_MAX = int(sys.maxsize // 100)
+
 def is_in_corner(grid, pos):
     """
     Checks if a stone is in a corner, which would cause a deadlock unless it’s already on a goal.
@@ -68,7 +70,7 @@ def retrieve_stone_positions(grid):
                 stone_positions.append((r, c))
     return stone_positions
 
-def detect_deadlock(state):
+def detect_deadlock(problem, state):
     """
     Detects if the current state has reached a deadlock configuration where it
     becomes impossible to reach the goal.
@@ -82,6 +84,9 @@ def detect_deadlock(state):
 
     # Retrieve stone positions directly from the grid
     stone_positions = retrieve_stone_positions(state.grid)
+    for pos in stone_positions:
+        if pos in problem.dead_square:
+            return True
 
     # Check for simple deadlock patterns (e.g., stones in corners)
     for stone_pos in stone_positions:
@@ -145,8 +150,7 @@ def is_surrounded_by_walls_or_stones(grid, r, c):
         grid[r][c+1] if c < len(grid[r]) - 1 else '#'
     ]
     return all(cell == '#' or cell == '$' for cell in surrounding)
-
-
+        
 # Tutorial: goals: set of goals, walls: set of walls, paths: anything except walls 
 # directions = [u, d, l, r]
 # dead_squuare is a set of cells that will cause deadlock
@@ -172,3 +176,13 @@ def is_surrounded_by_walls_or_stones(grid, r, c):
 # 						if (boxPosition not in walls) and (playerPosition not in walls):
 # 							distanceToGoal[goal][boxPosition] = distanceToGoal[goal][position] + 1
 # 							queue.put(boxPosition)
+#
+# 	for path in paths:
+# 		ok = 1
+# 		for goal in goals:	
+# 			if distanceToGoal[goal][path] != 1e9:
+# 				ok = 0
+# 				break
+# 		if ok == 1:
+# 			dead_squares.add(path)
+# 	return distanceToGoal, dead_squares
