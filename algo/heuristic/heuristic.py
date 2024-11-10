@@ -56,6 +56,7 @@ def move_heuristic(node):
     for stone in stone_positions_not_on_switch:
         if min_stone_distance > manhattan_distance(ares_position, stone):
             min_stone_distance = manhattan_distance(ares_position, stone)
+    return min_stone_distance
 
 def manhattan_distance(x, y):
     return abs(x[0] - y[0]) + abs(x[1] - y[1])
