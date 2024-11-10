@@ -214,10 +214,17 @@ class SokobanProblem:
         Detects if a square is a dead square based on the switch distance matrix.
         """
         dead_square = set()
+        tmp = switch_distance[0]
+        temp_grid = [[0 for _ in range(len(tmp[0]))] for _ in range(len(tmp))]
         # If a cell is unreachable from all switches, it is a dead square
-        for r, row in enumerate(switch_distance):
-            for c, distances in enumerate(row):
-                if all(d == INT_MAX for d in distances):
-                    dead_square.add((r, c))
+        for switch in switch_distance:
+            for i in range(len(switch)):
+                for j in range(len(switch[i])):
+                    if switch[i][j] != INT_MAX:
+                        temp_grid[i][j] = 1
+        for i in range(len(temp_grid)):
+            for j in range(len(temp_grid[i])):
+                if temp_grid[i][j] == 0:
+                    dead_square.add((i, j))
         return dead_square
     
