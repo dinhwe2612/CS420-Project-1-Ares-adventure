@@ -75,6 +75,10 @@ def best_first_search(problem, f):
             if s_hash not in reached or child.path_cost < reached[s_hash].path_cost:
                 reached[s_hash] = child  # Mark the state as reached with the new path cost
                 cost = f(child)
+                # for row in s.grid:
+                #     print(row)
+                # print(f(child))
+                # print()
                 if cost < 0:
                     print("cost âm kìa pé")
                 frontier.put(child, cost)  # Add the child to the frontier
