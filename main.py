@@ -63,7 +63,7 @@ class UserInterface(GameModeObserver):
             elif algo == "UCS":
                 result = uniform_cost_search(problem)
             elif algo == "A*":
-                result = best_first_search(problem, lambda node: f(node))
+                result = best_first_search(problem, lambda node: f(node, problem))
             
             # Call the callback function with the result once done
             on_algorithm_complete(result)
