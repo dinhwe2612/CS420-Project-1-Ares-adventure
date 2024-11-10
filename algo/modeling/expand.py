@@ -1,9 +1,7 @@
 from .node import Node
 from algo.deadlocks import detect_deadlock
 import sys
-
-INT_MAX = sys.maxsize
-
+INT_MAX = int(sys.maxsize // 100)
 def expand(problem, node):
     """Generates the child nodes for each valid action."""
     s = node.state
@@ -14,11 +12,6 @@ def expand(problem, node):
         # Detect deadlock
         if detect_deadlock(s_prime): 
             continue
-        
-        stone_positions = list(node.state.stone_weight_map.keys())
-        for stone in stone_positions:
-            if min(problem.switch_distance[i][stone[0]][stone[1]] for i in range(len(problem.switch_distance))) == INT_MAX:
-                continue
 
         # Calculate the cost of moving to the new state
         cost = node.path_cost + action_cost

@@ -1,7 +1,7 @@
-import sys
 from collections import deque
 
-MAX_INT = sys.maxsize / 100
+import sys
+INT_MAX = int(sys.maxsize // 100)
 
 class pull_bfs:
     def __init__(self, switch_position, grid, ares_position):
@@ -12,7 +12,7 @@ class pull_bfs:
         self.r_directions = [(1, 0),(-1, 0),(0, 1),(0, -1)]
         
     def run(self):
-        dist = [[[[MAX_INT for j in range(len(self.grid[i]))] for i in range(len(self.grid))] for y in range(len(self.grid[x]))] for x in range(len(self.grid))]
+        dist = [[[[INT_MAX for j in range(len(self.grid[i]))] for i in range(len(self.grid))] for y in range(len(self.grid[x]))] for x in range(len(self.grid))]
         ares = self.ares_position
         switch = self.switch_position
         dist[ares[0]][ares[1]][switch[0]][switch[1]] = 0
