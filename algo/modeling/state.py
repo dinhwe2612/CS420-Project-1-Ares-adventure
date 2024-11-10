@@ -31,8 +31,4 @@ class State:
                     switch_positions.append((row, col))
         return switch_positions
     def __hash__(self):
-        # Iterate over the grid to create a hashable representation
-        hashable = ()
-        for row in self.grid:
-            hashable += tuple(row)
-        return hash(hashable)
+        return hash((tuple(map(tuple, self.grid)), tuple(self.stone_weight_map.items())))
