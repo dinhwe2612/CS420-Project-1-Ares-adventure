@@ -21,7 +21,7 @@ def h(node, problem):
     # Return the heuristic
     if total_matching_cost < 0:
         print("cost matching âm kìa pé")
-    return total_matching_cost
+    return total_matching_cost + move_heuristic(node)
 
 # Define the evaluation function f for A* (path_cost + heuristic)
 def f(node, problem):
@@ -42,12 +42,13 @@ def find_ares(node):
                 return (r, c)
     return None
 
-def move_heuristic(node, problem):
+def move_heuristic(node):
     ares_position = find_ares(node)
-    
-    
-
     stone_positions = list(node.state.stone_weight_map.keys())
     min_stone_distance = INT_MAX
-    for stone in stone_positions
-    
+    for stone in stone_positions:
+        if min_stone_distance > manhattan_distance(ares_position, stone):
+            min_stone_distance = manhattan_distance(ares_position, stone)
+
+def manhattan_distance(x, y):
+    return abs(x[0] - y[0]) + abs(x[1] - y[1])
