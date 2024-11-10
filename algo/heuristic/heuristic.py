@@ -1,6 +1,9 @@
 import numpy as np
 from scipy.sparse import csr_matrix
 from scipy.sparse.csgraph import min_weight_full_bipartite_matching
+import sys
+
+MAX_INT = sys.maxsize / 100
 
 def h(node, problem):
     stone_positions = list(node.state.stone_weight_map.keys())
@@ -15,9 +18,10 @@ def h(node, problem):
         # Convert to csr_matrix and use min_weight_full_bipartite_matching for larger cases
         weight_matrix = csr_matrix(weight_matrix)
         row_ind, col_ind = min_weight_full_bipartite_matching(weight_matrix)
-        total_matching_cost = weight_matrix[row_ind, col_ind].sum()
-
+        total_matching_cost = min(weight_matrix[row_ind, col_ind].sum(), MAX_INT)
     # Return the heuristic
+    if total_matching_cost < 0:
+        print("cost matching âm kìa pé")
     return total_matching_cost
 
 # Define the evaluation function f for A* (path_cost + heuristic)

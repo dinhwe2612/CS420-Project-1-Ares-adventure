@@ -1,7 +1,7 @@
 import sys
 from collections import deque
 
-MAX_INT = sys.maxsize
+MAX_INT = sys.maxsize / 100
 
 class pull_bfs:
     def __init__(self, switch_position, grid, ares_position):

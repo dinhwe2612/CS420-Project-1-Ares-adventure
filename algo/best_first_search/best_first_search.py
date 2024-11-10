@@ -29,7 +29,10 @@ def best_first_search(problem, f):
         # Get the node with the lowest f value from the frontier
         node = frontier.get()
         nodes_expanded += 1  # Count each node expanded
-        
+        # for row in node.state.grid:
+        #     print(row)
+        # print(f(node))
+        # print()
         # If the goal state is reached, collect metrics and return results
         if problem.goal_test(node.state):
             # end_time = time.time()
@@ -71,7 +74,10 @@ def best_first_search(problem, f):
             # Check if the new state has not been reached or has a lower path cost
             if s_hash not in reached or child.path_cost < reached[s_hash].path_cost:
                 reached[s_hash] = child  # Mark the state as reached with the new path cost
-                frontier.put(child, f(child))  # Add the child to the frontier
+                cost = f(child)
+                if cost < 0:
+                    print("cost âm kìa pé")
+                frontier.put(child, cost)  # Add the child to the frontier
     
     # Return metrics if no solution is found
     # end_time = time.time()

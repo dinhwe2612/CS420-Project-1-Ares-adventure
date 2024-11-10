@@ -21,8 +21,6 @@ class SokobanProblem:
                 if initial_grid[i][j] in {'@', '+'}:
                     ares_position = (i, j)
         self.switch_distance = [pull_bfs(position, initial_grid, ares_position).run() for position in self.switch_positions]
-        for row in self.switch_distance[0]:
-            print(row)
         self.initial_state = State(initial_grid, stone_weight_map)
 
     def map_stone_weights(self, grid, stone_weights):

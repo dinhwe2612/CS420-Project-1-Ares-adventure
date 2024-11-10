@@ -18,7 +18,7 @@ from algo import turnIntoTuple
 # Define stone weights
 # stone_weights = [2, 3, 1]
 
-initial_grid, stone_weights = read_file("input/input-04.txt")
+initial_grid, stone_weights = read_file("input/input-01.txt")
 # initial_grid, stone_weights = read_file("../algo/test/test3.txt")
 # initial_grid = turnIntoTuple(initial_grid)
 
