@@ -44,9 +44,16 @@ def find_ares(node):
 
 def move_heuristic(node):
     ares_position = find_ares(node)
-    stone_positions = list(node.state.stone_weight_map.keys())
+    stone_positions_not_on_switch = []
+    grid = node.state.grid # Get the map
+    rows = len(grid)
+    for r in range(rows):
+        cols = len(grid[r])
+        for c in range(cols):
+            if grid[r][c] == '$':
+                stone_positions_not_on_switch.append((r, c))
     min_stone_distance = INT_MAX
-    for stone in stone_positions:
+    for stone in stone_positions_not_on_switch:
         if min_stone_distance > manhattan_distance(ares_position, stone):
             min_stone_distance = manhattan_distance(ares_position, stone)
 
