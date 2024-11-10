@@ -113,8 +113,6 @@ class PlayGameMode(GameMode):
             print(messageError)
     
     def load_map(self, mapPath):
-        if self.map == mapPath:
-            return
         self.clear_data()
         self.grid, self.stone_weights = read_level("input/" + mapPath)
         for i in self.grid:
@@ -172,6 +170,7 @@ class PlayGameMode(GameMode):
         if event.type == pygame_gui.UI_DROP_DOWN_MENU_CHANGED:
             if event.ui_element == self.dropdown_algo:
                 self.algo = event.text
+                self.load_map(self.map)
             
             if event.ui_element == self.dropdown_map:
                 self.load_map(event.text)

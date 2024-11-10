@@ -15,12 +15,11 @@ class MenuGameMode(GameMode):
         self.load_background_image()
 
         # UI Elements
-        self.start_button = UIButton(relative_rect=pygame.Rect(0, 140, 160, 100),
-                                     text='Start', manager=self.ui_manager,
-                                     anchors={'centerx': 'centerx'})
-        self.exit_button = UIButton(relative_rect=pygame.Rect(0, 90, 160, 100),
+        self.start_button = UIButton(relative_rect=pygame.Rect(520, 390, 120, 50),
+                                     text='Start', manager=self.ui_manager)
+        self.exit_button = UIButton(relative_rect=pygame.Rect(520, 10, 120, 50),
                                     text='Exit', manager=self.ui_manager,
-                                    anchors={'centerx': 'centerx', 'top_target': self.start_button})
+                                    anchors={'top_target': self.start_button})
 
     def load_background_image(self):
         # Load and scale the background image
