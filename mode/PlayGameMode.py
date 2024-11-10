@@ -57,7 +57,6 @@ class PlayGameMode(GameMode):
             window_display_title="Loading",
             object_id="#loading_popup"
         )
-        
         self.loading_label = pygame_gui.elements.UILabel(
             relative_rect=pygame.Rect((50, 50), (200, 30)),
             text="Loading, please wait...",
@@ -65,6 +64,20 @@ class PlayGameMode(GameMode):
             container=self.loading_popup
         )
         self.loading_popup.hide()
+        
+        self.no_solution_popup = pygame_gui.elements.UIWindow(
+            rect=pygame.Rect((250, 200), (300, 150)),
+            manager=self.ui_manager,
+            window_display_title="No Solution",
+            object_id="#no_solution_popup"
+        )
+        self.no_solution_label = pygame_gui.elements.UILabel(
+            relative_rect=pygame.Rect((50, 50), (200, 30)),
+            text="No Solution Found.",
+            manager=self.ui_manager,
+            container=self.no_solution_popup
+        )
+        self.no_solution_popup.hide()
         
         self.load_map("input-01.txt")
     
@@ -79,6 +92,9 @@ class PlayGameMode(GameMode):
         self.start = False
 
     def run_solutionPath(self, solutionPath, weightPath, numNode, timeCost, memCost):
+        if solutionPath == None:
+            self.no_solution_popup.show()
+            return
         self.loading_popup.hide()
         self.run_button.set_text('Pause')
         self.solution_path = solutionPath
