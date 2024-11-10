@@ -106,7 +106,9 @@ class PlayGameMode(GameMode):
 
     def run_solutionPath(self, solutionPath, weightPath, numNode, timeCost, memCost):
         if solutionPath == None:
+            self.loading_popup.hide()
             self.no_solution_popup.show()
+            self.enable_elements(True)
             return
         self.loading_popup.hide()
         self.run_button.set_text('Pause')
@@ -159,6 +161,7 @@ class PlayGameMode(GameMode):
 
     def start_pressed(self):
         if self.solution_path == None:
+            self.enable_elements(False)
             self.loading_popup.show()
             self.observer.run_algorithm(self.grid, self.stone_weights, self.algo)
         elif len(self.commands) > 0:
@@ -200,7 +203,6 @@ class PlayGameMode(GameMode):
 
     def update(self, delta_time):
         super().update(delta_time)
-        self.enable_elements(not self.loading_popup._visible)
         if self.start:
             self.update_textbox()
             if self.commands == None:
