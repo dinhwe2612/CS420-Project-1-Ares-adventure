@@ -110,6 +110,7 @@ class PlayGameMode(GameMode):
             self.no_solution_popup.show()
             self.enable_elements(True)
             return
+        self.enable_elements(True)
         self.loading_popup.hide()
         self.run_button.set_text('Pause')
         self.solution_path = solutionPath
