@@ -113,7 +113,7 @@ def generate_output_for_input_file(input_file):
 
     # Run A*
     try:
-        astar_result = best_first_search(problem, lambda node: f(node))
+        astar_result = best_first_search(problem, lambda node: f(node, problem))
         results.append(format_result("A*", astar_result))
         print(f"A* completed successfully for input {input_index}.")
     except Exception as e:

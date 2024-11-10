@@ -72,7 +72,7 @@ def best_first_search(problem, f):
             s_hash = hash(s)  # Get the hash of the state
             
             # Check if the new state has not been reached or has a lower path cost
-            if s_hash not in reached: # or child.path_cost < reached[s_hash].path_cost:
+            if s_hash not in reached or child.path_cost < reached[s_hash].path_cost:
                 reached[s_hash] = child  # Mark the state as reached with the new path cost
                 cost = f(child)
                 if cost < 0:
