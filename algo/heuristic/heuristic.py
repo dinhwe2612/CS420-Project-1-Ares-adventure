@@ -10,7 +10,7 @@ def h(node, problem):
     switch_positions = list(node.state.switch_positions)
     # Calculate the weight matrix for the stone-switch pairs
     stone_positions = list(node.state.stone_weight_map.keys())
-    weight_matrix = [[problem.switch_distance[i][stone[0]][stone[1]] for i in range(len(stone_positions))]  for stone in stone_positions]
+    weight_matrix = [[problem.switch_distance[i][stone[0]][stone[1]] * node.state.stone_weight_map.get(stone) for i in range(len(stone_positions))]  for stone in stone_positions]
     if len(stone_positions) == 1 and len(switch_positions) == 1:
         # Directly use the single value in 1x1 weight matrix
         total_matching_cost = weight_matrix[0][0]
