@@ -89,6 +89,8 @@ class PlayGameMode(GameMode):
         self.time_cost = None
         self.mem_cost = None
         self.start = False
+        updated_text = self.steps_text.format(num_node='', time_cost='', mem_cost='', num_steps='', path_cost='', action_log='')
+        self.steps_textbox.set_text(updated_text)
 
     def run_solutionPath(self, solutionPath, weightPath, numNode, timeCost, memCost):
         if solutionPath == None:
