@@ -1,5 +1,6 @@
 from .node import Node
 from .state import State
+from .pull_bfs import pull_bfs
 
 class SokobanProblem:
     def __init__(self, initial_grid, stone_weights):
@@ -12,6 +13,16 @@ class SokobanProblem:
         """
         # Create an initial state with the grid and the stone weights
         stone_weight_map = self.map_stone_weights(initial_grid, stone_weights)
+        self.switch_positions = [(i, j) for i in range(len(initial_grid)) for j in range(len(initial_grid[i]))
+                    if initial_grid[i][j] in {'.', '*', '+'}]
+        ares_position = None
+        for i in range(len(initial_grid)):
+            for j in range(len(initial_grid[i])):
+                if initial_grid[i][j] in {'@', '+'}:
+                    ares_position = (i, j)
+        self.switch_distance = [pull_bfs(position, initial_grid, ares_position).run() for position in self.switch_positions]
+        for row in self.switch_distance[0]:
+            print(row)
         self.initial_state = State(initial_grid, stone_weight_map)
 
     def map_stone_weights(self, grid, stone_weights):

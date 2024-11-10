@@ -32,7 +32,7 @@ if not is_valid:
     exit()
 
 # Run Best-First Search using the heuristic function `f`
-result = best_first_search(problem, lambda node: f(node))
+result = best_first_search(problem, lambda node: f(node, problem))
 
 # Extract the solution node from the result
 solution = result.get("solution")
