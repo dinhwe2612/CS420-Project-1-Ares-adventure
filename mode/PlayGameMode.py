@@ -118,6 +118,7 @@ class PlayGameMode(GameMode):
         for i in self.grid:
             print(i)
         print(self.stone_weights)
+        self.map = mapPath
         self.gameState = GameState(self.screenHeightGame, self.screenWidthGame, self.grid, self.stone_weights)
         self.commands = []
         self.layers = [
